@@ -1,7 +1,7 @@
 #include "nfa.h"
 
 struct nfa new_nfa() {
-    return (struct nfa) { 0, (char_array) NULL, NULL, NULL };
+    return (struct nfa) { 0, NULL, NULL };
 }
 
 
@@ -25,7 +25,7 @@ void free_nfa(struct nfa *a) {
     if (a->final_states != NULL) {
         free(a->final_states);
     }
-    if (a->trans != NULL) {
-        free(a->trans);
+    if (&(a->trans) != NULL) {
+        free_transition_array(&(a->trans));
     }
 }

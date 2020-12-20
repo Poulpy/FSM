@@ -18,6 +18,22 @@ void append_transition(struct transition_array *ta, struct transition t) {
 struct transition new_transition(unsigned int initial_state, unsigned char c,
                                  unsigned int dest_state) {
 
-    return (struct transition) { initial_state, c, dest_state };
+    unsigned int *dest_states;
+
+    dest_states = (unsigned int *) malloc(sizeof(unsigned int));
+    dest_states[0] = dest_state;
+
+    return (struct transition) { initial_state, c, dest_states };
 }
 
+void free_transition(struct transition *t) {
+    free(t->dest_states);
+}
+
+void free_transition_array(struct transition_array *ta) {
+    for (size_t i = 0; i != ta->len; i++) {
+        free_transition(&(ta->transitions[i]));
+    }
+
+    free(ta->transitions);
+}
