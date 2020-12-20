@@ -9,12 +9,16 @@ struct transition_array new_transition_array(size_t len) {
     return ta;
 }
 
+// TODO append transition to already existing transition
 void append_transition(struct transition_array *ta, struct transition t) {
     ta->transitions = realloc(ta->transitions, sizeof(struct transition) * (ta->len + 1));
     ta->transitions[ta->len] = t;
     ta->len++;
 }
 
+/**
+ * Note: don't forget to free
+ */
 struct transition new_transition(unsigned int initial_state, unsigned char c,
                                  unsigned int dest_state) {
 
