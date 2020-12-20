@@ -5,8 +5,6 @@
 #include "int_array.h"
 
 #define INITIAL_STATE 0
-#define FINAL 0
-#define NOT_FINAL 1
 
 // nondeterministic finite automaton
 struct nfa {
@@ -33,7 +31,6 @@ struct char_array {
   size_t len;
 };
 
-struct int_array new_int_array(int len);
 int eql_int_array(struct int_array *ia1, struct int_array *ia2);
 int contains(struct int_array *container, struct int_array ia);
 
