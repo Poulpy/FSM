@@ -1,6 +1,8 @@
 #ifndef UCHAR_ARRAY_H
 #define UCHAR_ARRAY_H
 
+#include "stdlib.h"
+
 struct char_array {
   unsigned char *chars;
   size_t len;
