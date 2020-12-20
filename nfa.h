@@ -24,19 +24,7 @@ struct transition {
   unsigned int *dest_states;
 };
 
-
-// alphabet
-struct char_array {
-  unsigned char *chars;
-  size_t len;
-};
-
-int eql_int_array(struct int_array *ia1, struct int_array *ia2);
-int contains(struct int_array *container, struct int_array ia);
-
-int append(struct char_array *ca, char c);
-
-struct afn init_afn();
+struct afn new_afn();
 void free_afn(struct afn *a);
 struct transition init_transition(unsigned int initial_state, unsigned char c, unsigned int final_state);
 

@@ -23,7 +23,13 @@ void free_uint_array(struct int_array *ia) {
 unsigned int max_uint_array(struct int_array *ia) {
     unsigned int max;
 
-    for (size_t i = 0; i != ia->len; i++) {
+    max = ia->ints[0];
+
+    if (ia->len == 1) {
+        return max;
+    }
+
+    for (size_t i = 1; i != ia->len; i++) {
         if (ia->ints[i] > max) {
             max = ia->ints[i];
         }
