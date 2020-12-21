@@ -4,6 +4,10 @@
 #include<stdbool.h>
 #include<string.h>
 #include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+
+#include "int_array.h"
 
 // deterministic finite automaton
 struct dfa {
@@ -41,6 +45,7 @@ void free_function_array(struct function_array *fa);
 struct dfa *dfa_minimization(struct dfa *d);
 
 struct dfa *dfa_minimization(struct dfa *d);
+void deduce_states(struct uints_array *table, struct int_array *states);
 
 
 // utils

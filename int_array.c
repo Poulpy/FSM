@@ -71,17 +71,15 @@ void copy_uint_array(struct int_array *to, struct int_array *from) {
  */
 struct uints_array *new_uints_array(size_t row, size_t col) {
     struct uints_array *uia;
-    struct int_array *ia;
+    struct int_array **ia;
 
     uia = (struct uints_array *) malloc(sizeof(struct uints_array));
 
-    ia = (struct int_array *) malloc(sizeof(struct int_array) * row);
+    uia->rows = (struct int_array **) malloc(sizeof(struct int_array *) * row);
 
     for (size_t i = 0; i != row; i++) {
-        ia[i] = new_int_array(col);
+        uia->rows[i] = new_int_array(col);
     }
-
-    uia->rows = ia;
 
     return uia;
 }

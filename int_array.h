@@ -10,7 +10,7 @@ struct int_array {
 };
 
 struct uints_array {
-    struct int_array *rows;
+    struct int_array **rows;
     size_t len;
 };
 
