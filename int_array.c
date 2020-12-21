@@ -6,6 +6,7 @@
 struct int_array *new_int_array(size_t len) {
     struct int_array *ia;
 
+    ia = (struct int_array *) malloc(sizeof(struct int_array));
     ia->ints = (int *) malloc(sizeof(int) * len);
     ia->len = len;
 
@@ -14,6 +15,7 @@ struct int_array *new_int_array(size_t len) {
 
 void free_uint_array(struct int_array *ia) {
     free(ia->ints);
+    free(ia);
 }
 
 
@@ -53,4 +55,45 @@ bool eql_uint_array(struct int_array *ia1, struct int_array *ia2) {
     return true;
 }
 
+void copy_uint_array(struct int_array *to, struct int_array *from) {
+    if (to->len != from->len) return;
 
+    for (size_t i = 0; i != from->len; i++) {
+        to->ints[i] = from->ints[i];
+    }
+}
+
+
+
+
+/*
+ * Returns a 2D array of unsigned ints
+ */
+struct uints_array *new_uints_array(size_t row, size_t col) {
+    struct uints_array *uia;
+    struct int_array *ia;
+
+    uia = (struct uints_array *) malloc(sizeof(struct uints_array));
+
+    ia = (struct int_array *) malloc(sizeof(struct int_array) * row);
+
+    for (size_t i = 0; i != row; i++) {
+        ia[i] = new_int_array(col);
+    }
+
+    uia->rows = ia;
+
+    return uia;
+}
+
+
+/*
+ * Free the memory of a 2D array of unsigned ints
+ */
+void free_uints_array(struct uints_array *uia, size_t row) {
+    for (size_t i = 0; i != row; i++) {
+        free_uint_array(uia->rows[i]);
+    }
+
+    free(uia);
+}

@@ -38,7 +38,7 @@ struct ftransition null_transition();
 struct function_array *new_function_array(size_t len);
 void free_dfa(struct dfa *d);
 void free_function_array(struct function_array *fa);
-
+struct dfa *dfa_minimization(struct dfa *d);
 
 struct dfa *dfa_minimization(struct dfa *d);
 

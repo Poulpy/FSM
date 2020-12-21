@@ -110,21 +110,26 @@ void append_transition(struct function_array *fa, struct ftransition t) {
     fa->len++;
 }
 
-/*
-struct dfa *dfa_minimization(struct dfa *d) {
-    t1 = [[]];
-    t2 = [[]];
-    done = [0] * afd.states;
 
-    struct int_array *states;
-    struct int_array *states_before;
+struct dfa *dfa_minimization(struct dfa *d) {
+    struct uints_array *table;
+    struct ftransition trans;
+    struct int_array *states, *states_before;
+    bool *done, bool *new_final_states;
+    unsigned int new_states_count;
+
 
     states = new_int_array(d->states_count);
     states_before = new_int_array(d->states_count);
+    states_count = d->states_count;
+    table = new_uints_array(strlen(d->alphabet), states_count);
+
+
 
     final_states = afd.final_states;
 
-    for (size_t i = 0; i != d->states_count; i++) {
+    // initialization
+    for (size_t i = 0; i != states_count; i++) {
         if (d->final_states[i] == true) {
             states[i] = 1;
         } else {
@@ -132,57 +137,92 @@ struct dfa *dfa_minimization(struct dfa *d) {
         }
     }
 
-
+    // write transitions in table
     for (size_t i = 0; i != 2; i++) {
-
-    }
-    faire 2 fois
-      pour un sommet s donné, i
-        pour un symbole c donné, j
-          dst = prendre la transition partant de s avec la lettre a
-          prendre le numéro de dst
-          t1[i][j] = dst
-      deduce_states(states, t1)
-      states_before = states
-
-
-    tant que states_before != states
-      pour un sommet s donné
-        pour un symbole c donné
-          dst = prendre la transition partant de s avec la lettre a
-          prendre le numéro de dst
-      deduce_states(states, t1)
-      states_before = states
-
-
-    for (size_t i = 0; i != len(t1); i++) {
-      for (size_t j = 0; j != len(t1[i]); j++) {
-        t = new_transition(states[j], alphabet[i], t1[i][j]);
-
-        if (!done[states[j]]) {
-          transitions << t;
+        for (size_t start_state = 0; start_state != states_count; start_state++) {
+            for (size_t s = 0; s != strlen(d->alphabet); s++) {
+                trans = find_transition_with_start_state_and_symbol(d, start_state, d->alphabet[s]);
+                // Stock the value (see initialisation) of the destination state
+                table->rows[s]->ints[start_state] = states[trans.dest_state];
+            }
         }
-      }
-      done[states[j]] = 1;
+        // check which states has the same transitions
+        deduce_states(states, t1);
+        copy_uint_array(states_before, states);
     }
 
-    real_states = max(states);
-    // mettre done à 0 partout
+    // We loop till we reach the same conclusion twice
+    while (eql_uint_array(states_before, states) == false) {
+        for (size_t start_state = 0; start_state != states_count; start_state++) {
+            for (size_t s = 0; s != strlen(d->alphabet); s++) {
+                trans = find_transition_with_start_state_and_symbol(d, start_state, d->alphabet[s]);
+                table->rows[s]->ints[start_state] = states[trans.dest_state];
+            }
+        }
+        deduce_states(table, states);
+        copy_uint_array(states_before, states);
+    }
+
+    new_states_count = max_uint_array(states);
+    done = (bool *) malloc(sizeof(bool) * new_states_count);
+    new_final_states = (bool *) malloc(sizeof(bool) * new_states_count);
+    for (size_t i = 0; i != new_states_count; i++) {
+        done[i] = false;
+    }
+    new_function_array = *new_function_array(new_states_count * strlen(d->alphabet));
+
+    // We create the transitions
+    // i : symbol
+    // j : start state
+    for (size_t i = 0; i != states_count; i++) {
+        for (size_t j = 0; j != table->rows[i]->len; j++) {
+            t = new_transition(states[j], alphabet[i], table->rows[i]->ints[j]);
+
+            // Since some columns may be redundant, we check in a boolean
+            // array if we already checked them
+            if (done[states[j]] == false) {
+                new_function_array->transitions[i + j] = t;
+            }
+        }
+        done[states[j]] = true;
+    }
+
+    for (size_t i = 0; i != new_states_count; i++) {
+        done[i] = false;
+    }
 
     // deduce final states
-    for (size_t i = 0; i != len(tates); i++) {
-      if (!done[states[i]] && final_states.contains(i)) {
-        new_final_states << states[i];
-        done[states[i]] = 1;
-      }
+    for (size_t i = 0; i != states_count; i++) {
+        if (!done[states[i]] && d->final_states[i] == true) {
+            new_final_states[states[i]] = true;
+            done[states[i]] = true;
+        }
     }
 
-    dfa = new_dfa(len(states), alphabet, final_states, transitions);
+    //dfa = new_dfa(len(states), alphabet, final_states, transitions);
+    new_dfa = new_dfa(new_states_count);
+    new_dfa->alphabet = d->alphabet;
+    new_dfa->final_states = new_final_states;
+    new_dfa->func = new_function_array;
 
-    free(states);
-    free(states_before);
+    free_uint_array(states);
+    free_uint_array(states_before);
+    free(done);
 }
-*/
+
+// TODO
+void deduce_states(struct uints_array *table, struct int_array *states) {
+    for (size_t i = 0; i != states_count; i++) {
+        states[i] = i;
+
+        for (size_t j = i + 1; j != states_count; j++) {
+            if (eql_uint_array(table->rows[i], table->rows[j]) == true) {
+                states[j] = i;
+            }
+        }
+    }
+}
+
 
 // utils
 unsigned char *get_ascii_table() {
