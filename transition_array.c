@@ -22,16 +22,16 @@ void append_transition(struct transition_array *ta, struct transition t) {
 struct transition new_transition(unsigned int initial_state, unsigned char c,
                                  unsigned int dest_state) {
 
-    unsigned int *dest_states;
+    struct int_array dest_states;
 
-    dest_states = (unsigned int *) malloc(sizeof(unsigned int));
-    dest_states[0] = dest_state;
+    dest_states = new_int_array(1);
+    dest_states.ints[0] = dest_state;
 
-    return (struct transition) { initial_state, c, dest_states };
+    return (struct transition) { initial_state, c, &dest_states };
 }
 
 void free_transition(struct transition *t) {
-    free(t->dest_states);
+    free_uint_array(t->dest_states);
 }
 
 void free_transition_array(struct transition_array *ta) {

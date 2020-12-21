@@ -2,12 +2,13 @@
 #define TRANSITION_ARRAY_H
 
 #include<stdlib.h>
+#include "int_array.h"
 
 struct transition {
   unsigned int initial_state;
   unsigned char symbol;
   // There can be multiple destination states for one state
-  unsigned int *dest_states;
+  struct int_array *dest_states;
 };
 
 struct transition_array {

@@ -27,7 +27,7 @@ void free_nfa(struct nfa *a) {
     }
 
     if (&(a->trans) != NULL) {
-        free_transition_array(&(a->trans));
+        free_transition_array(a->trans);
     }
 }
 
@@ -46,6 +46,29 @@ struct nfa create_language_from_char(unsigned char c) {
     a.trans.transitions[0] = new_transition(INITIAL_STATE, c, 1);
 
     return a;
+}
+
+void print_nfa(struct nfa *a) {
+    printf("states_count : %ud\n", a->states_count);
+
+    printf("final_states : ");
+
+    for (size_t i = 0; i != a->states_count; i++) {
+        if (a->final_states[i] == true) {
+            printf("%d ", i);
+        }
+    }
+
+    printf("\ntransitions : \n");
+    return;
+    for (size_t i = 0; i != a->trans.len; i++) {
+        printf("\t");
+        printf("%d, ", a->trans.transitions[0].initial_state);
+        printf("%c, ", a->trans.transitions[0].symbol);
+        for (size_t j = 0; j != a->trans.transitions[i].dest_states->len; i++) {
+            printf("%du\n", a->trans.transitions[0].dest_states->ints[j]);
+        }
+    }
 }
 
 

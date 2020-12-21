@@ -6,6 +6,7 @@
 #include "int_array.h"
 #include "uchar_array.h"
 #include "transition_array.h"
+#include<stdio.h>
 
 #define INITIAL_STATE 0
 
@@ -16,7 +17,7 @@ struct nfa {
   // if FINAL then state is final
   // else state is not final
   bool *final_states;
-  struct transition_array trans;
+  struct transition_array *trans;
 
   // TODO is it really useful ?
   // struct char_array alphabet;
@@ -32,5 +33,7 @@ struct nfa create_language_from_char(unsigned char c);
 struct nfa union_afn(struct nfa a1, struct nfa a2);
 struct nfa concatenate_afn(struct nfa a1, struct nfa a2);
 struct nfa kleene_closure(struct nfa a);
+
+void print_nfa(struct nfa *a);
 
 #endif
