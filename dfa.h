@@ -17,6 +17,7 @@ struct dfa {
   struct function_array *func;// transition function
 };
 
+// array of transitions
 struct function_array {
     struct ftransition *transitions;
     size_t len;
@@ -30,25 +31,20 @@ struct ftransition {
 };
 
 
-struct dfa *new_dfa(unsigned int states_count);
-void append_transition(struct function_array *fa, struct ftransition t);
 bool accept(struct dfa *d, unsigned char *word);
+struct dfa *dfa_minimization(struct dfa *d);
+struct dfa *new_dfa(unsigned int states_count);
+struct ftransition find_transition_with_start_state_and_symbol(struct dfa *d, unsigned int start_state, unsigned char symbol);
+void free_dfa(struct dfa *d);
 
-struct ftransition find_transition_with_start_state_and_symbol(struct dfa *d,
-                                                               unsigned int start_state,
-                                                               unsigned char symbol);
 bool eql_ftransition(struct ftransition f1, struct ftransition f2);
 struct ftransition null_transition();
 struct function_array *new_function_array(size_t len);
-void free_dfa(struct dfa *d);
+void append_transition(struct function_array *fa, struct ftransition t);
 void free_function_array(struct function_array *fa);
-struct dfa *dfa_minimization(struct dfa *d);
 
-struct dfa *dfa_minimization(struct dfa *d);
 void deduce_states(struct uints_array *table, struct int_array *states);
 
-
-// utils
 unsigned char *get_ascii_table();
 
 #endif
