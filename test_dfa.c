@@ -19,6 +19,16 @@ void test_accept() {
     } else {
         printf("KO\n");
     }
+    if (accept(&d, "ba") == false) {
+        printf("OK\n");
+    } else {
+        printf("KO\n");
+    }
+    if (accept(&d, "ab") == false) {
+        printf("OK\n");
+    } else {
+        printf("KO\n");
+    }
     if (accept(&d, "c") == false) {
         printf("OK\n");
     } else {
