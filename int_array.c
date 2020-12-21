@@ -3,11 +3,11 @@
 /**
  * Note: don't forget to free
  */
-struct int_array new_int_array(size_t len) {
-    struct int_array ia;
+struct int_array *new_int_array(size_t len) {
+    struct int_array *ia;
 
-    ia.ints = (int *) malloc(sizeof(int) * len);
-    ia.len = len;
+    ia->ints = (int *) malloc(sizeof(int) * len);
+    ia->len = len;
 
     return ia;
 }

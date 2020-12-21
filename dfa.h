@@ -8,7 +8,7 @@
 // deterministic finite automaton
 struct dfa {
   unsigned int states_count;
-  struct char_array *alphabet;
+  unsigned char *alphabet;
   bool *final_states;// of length states_count
   struct function_array *func;// transition function
 };
@@ -26,7 +26,7 @@ struct ftransition {
 };
 
 
-struct dfa *new_dfa(unsigned int states_count, bool *final_states);
+struct dfa *new_dfa(unsigned int states_count);
 void append_transition(struct function_array *fa, struct ftransition t);
 bool accept(struct dfa *d, unsigned char *word);
 
@@ -38,5 +38,12 @@ struct ftransition null_transition();
 struct function_array *new_function_array(size_t len);
 void free_dfa(struct dfa *d);
 void free_function_array(struct function_array *fa);
+
+
+struct dfa *dfa_minimization(struct dfa *d);
+
+
+// utils
+unsigned char *get_ascii_table();
 
 #endif

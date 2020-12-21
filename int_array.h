@@ -9,7 +9,7 @@ struct int_array {
   size_t len;
 };
 
-struct int_array new_int_array(size_t len);
+struct int_array *new_int_array(size_t len);
 void free_uint_array(struct int_array *ia);
 unsigned int max_uint_array(struct int_array *ia);
 // TODO
