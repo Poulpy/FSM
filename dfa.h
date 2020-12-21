@@ -11,10 +11,10 @@
 
 // deterministic finite automaton
 struct dfa {
-  unsigned int states_count;
-  unsigned char *alphabet;
-  bool *final_states;// of length states_count
-  struct function_array *func;// transition function
+    unsigned int states_count;
+    unsigned char *alphabet;
+    bool *final_states;// of length states_count
+    struct function_array *func;// transition function
 };
 
 // array of transitions
@@ -25,9 +25,9 @@ struct function_array {
 
 // transitions for dfa
 struct ftransition {
-  unsigned int start_state;
-  unsigned char symbol;
-  unsigned int dest_state;
+    unsigned int start_state;
+    unsigned char symbol;
+    unsigned int dest_state;
 };
 
 
