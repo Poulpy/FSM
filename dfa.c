@@ -1,4 +1,5 @@
 #include "dfa.h"
+#include<stdio.h>
 
 bool accept(struct dfa *d, unsigned char *word) {
     unsigned int current_state;
@@ -59,9 +60,9 @@ struct ftransition find_transition_with_start_state_and_symbol(struct dfa *d,
     }
 
     if (found)
-        return null_transition();
-    else
         return trans;
+    else
+        return null_transition();
 }
 
 

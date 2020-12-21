@@ -20,7 +20,7 @@ void test_accept() {
         printf("KO\n");
     }
     if (accept(&d, "c") == false) {
-        printf("OF\n");
+        printf("OK\n");
     } else {
         printf("KO\n");
     }
