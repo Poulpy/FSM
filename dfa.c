@@ -1,6 +1,6 @@
 #include "dfa.h"
 
-bool accept(struct dfa *d, struct char_array *word) {
+bool accept(struct dfa *d, unsigned char *word) {
     unsigned int current_state;
     bool is_accepted;
     size_t i;
@@ -10,13 +10,13 @@ bool accept(struct dfa *d, struct char_array *word) {
     i = 0;
     is_accepted = true;
 
-    while (is_accepted == true && i != word->len) {
-        transition = find_transition_with_start_state_and_symbol(d, current_state, word->chars[i]);
+    while (is_accepted == true && i != strlen(word)) {
+        transition = find_transition_with_start_state_and_symbol(d, current_state, word[i]);
 
         if (eql_ftransition(null_transition(), transition)) {
             is_accepted = false;
         } else {
-            current_state = transition.final_state;
+            current_state = transition.dest_state;
         }
 
         i++;
@@ -48,8 +48,8 @@ struct ftransition find_transition_with_start_state_and_symbol(struct dfa *d,
     i = 0;
     found = false;
 
-    while (!found && i != d->function_array->len) {
-        trans = d->function_array->transitions[i];
+    while (!found && i != d->func->len) {
+        trans = d->func->transitions[i];
 
         if (trans.start_state == start_state && trans.symbol == symbol) {
             found = true;
@@ -89,7 +89,3 @@ void append_transition(struct function_array *fa, struct ftransition t) {
     fa->len++;
 }
 
-
-void append_transition(struct dfa *d, struct ftransition ft) {
-    append_transition(d->func, ft);
-}

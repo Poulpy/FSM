@@ -13,7 +13,7 @@ void test_accept() {
     d.states_count = 2;
     d.func = new_function_array(1);
 
-    append_transition(&(d.func), t);
+    append_transition(d.func, t);
     if (accept(&d, "b") == true) {
         printf("OK\n");
     } else {

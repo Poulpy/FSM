@@ -2,6 +2,8 @@
 #define DFA_H
 
 #include<stdbool.h>
+#include<string.h>
+#include<stdlib.h>
 
 // deterministic finite automaton
 struct dfa {
@@ -25,8 +27,8 @@ struct ftransition {
 
 
 struct dfa *new_dfa(unsigned int states_count, bool *final_states);
-void append_transition(struct dfa *d, struct ftransition ft);
-bool accept(struct dfa *d, struct char_array *word);
+void append_transition(struct function_array *fa, struct ftransition t);
+bool accept(struct dfa *d, unsigned char *word);
 
 struct ftransition find_transition_with_start_state_and_symbol(struct dfa *d,
                                                                unsigned int start_state,
