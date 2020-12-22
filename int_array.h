@@ -26,6 +26,6 @@ void copy_uint_array(struct int_array *to, struct int_array *from);
 void free_uint_array(struct int_array *ia);
 
 struct uints_array *new_uints_array(size_t row, size_t col);
-void free_uints_array(struct uints_array *uia, size_t row);
+void free_uints_array(struct uints_array *uia);
 
 #endif

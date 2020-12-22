@@ -7,9 +7,7 @@ struct dfa *new_dfa(unsigned int states_count) {
     d->states_count = states_count;
 
     d->final_states = (bool *) malloc(sizeof(bool) * states_count);
-    for (size_t i = 0; i != states_count; i++) {
-        d->final_states[i] = false;
-    }
+    set_all(d->final_states, states_count, false);
 
     return d;
 }
@@ -202,6 +200,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
     free_uint_array(states);
     free_uint_array(states_before);
     free(done);
+    free_uints_array(table);
 
     return dfa_minimized;
 }

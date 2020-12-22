@@ -110,8 +110,8 @@ struct uints_array *new_uints_array(size_t row, size_t col) {
 /*
  * Free the memory of a 2D array of unsigned ints
  */
-void free_uints_array(struct uints_array *uia, size_t row) {
-    for (size_t i = 0; i != row; i++) {
+void free_uints_array(struct uints_array *uia) {
+    for (size_t i = 0; i != uia->len; i++) {
         free_uint_array(uia->rows[i]);
     }
 

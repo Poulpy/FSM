@@ -63,13 +63,48 @@ void test_deduce_states() {
         printf("KO\n");
     }
 
-    free_uints_array(uia, rows);
+    free_uints_array(uia);
     free_uint_array(states);
+}
+
+void test_dfa_minimization() {
+    struct dfa *d, *minimized_dfa;
+
+    d = new_dfa(8);
+    d->final_states[4] = true;
+    d->final_states[5] = true;
+    d->final_states[6] = true;
+    d->final_states[7] = true;
+    d->alphabet = (unsigned char *) malloc(sizeof(unsigned char) * 3);
+    d->alphabet[0] = 'a';
+    d->alphabet[1] = 'b';
+    d->func = new_function_array(16);
+
+    d->func->transitions[0] = (struct ftransition) { 0, 'a', 1 };
+    d->func->transitions[1] = (struct ftransition) { 0, 'b', 0 };
+    d->func->transitions[2] = (struct ftransition) { 1, 'a', 2 };
+    d->func->transitions[3] = (struct ftransition) { 1, 'b', 3 };
+    d->func->transitions[4] = (struct ftransition) { 2, 'a', 5 };
+    d->func->transitions[5] = (struct ftransition) { 2, 'b', 3 };
+    d->func->transitions[6] = (struct ftransition) { 3, 'a', 4 };
+    d->func->transitions[7] = (struct ftransition) { 3, 'b', 0 };
+    d->func->transitions[8] = (struct ftransition) { 4, 'a', 5 };
+    d->func->transitions[9] = (struct ftransition) { 4, 'b', 6 };
+    d->func->transitions[10] = (struct ftransition) { 5, 'a', 5 };
+    d->func->transitions[11] = (struct ftransition) { 5, 'b', 6 };
+    d->func->transitions[12] = (struct ftransition) { 6, 'a', 4 };
+    d->func->transitions[13] = (struct ftransition) { 6, 'b', 7 };
+    d->func->transitions[14] = (struct ftransition) { 7, 'a', 4 };
+    d->func->transitions[15] = (struct ftransition) { 7, 'b', 7 };
+    minimized_dfa = dfa_minimization(d);
+    free_dfa(d);
+    free(minimized_dfa);
 }
 
 int main() {
     test_accept();
     test_deduce_states();
+    test_dfa_minimization();
 
     return 0;
 }
