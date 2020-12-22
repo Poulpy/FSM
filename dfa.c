@@ -130,7 +130,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
     states = new_int_array(d->states_count);
     states_before = new_int_array(d->states_count);
     states_count = d->states_count;
-    table = new_uints_array(strlen(d->alphabet), states_count);
+    table = new_uints_array(states_count, strlen(d->alphabet));
 
     // initialization
     for (size_t i = 0; i != states_count; i++) {
@@ -141,11 +141,13 @@ struct dfa *dfa_minimization(struct dfa *d) {
         }
     }
 
+    z = 0;
     // We loop till we reach the same conclusion twice
     while (z < 2 && eql_uint_array(states_before, states) == false) {
         for (size_t start_state = 0; start_state != states_count; start_state++) {
             for (size_t s = 0; s != strlen(d->alphabet); s++) {
                 trans = find_transition_with_start_state_and_symbol(d, start_state, d->alphabet[s]);
+                printf("(%d %c %d)\n", trans.start_state, trans.symbol, trans.dest_state);
                 table->rows[start_state]->ints[s] = states->ints[trans.dest_state];
             }
         }
@@ -155,6 +157,9 @@ struct dfa *dfa_minimization(struct dfa *d) {
     }
 
     new_states_count = max_uint_array(states);
+    printf("New states count : %d\n", new_states_count);
+    print_uint_array(states);
+
     done = (bool *) malloc(sizeof(bool) * new_states_count);
     new_final_states = (bool *) malloc(sizeof(bool) * new_states_count);
 
@@ -184,6 +189,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
 
     // deduce final states
     for (size_t i = 0; i != states_count; i++) {
+        // LEAK RIGHT HERE
         if (*(done+states->ints[i]) == false && d->final_states[i] == true) {
             new_final_states[states->ints[i]] = true;
             *(done+states->ints[i]) = true;
@@ -216,13 +222,17 @@ struct dfa *dfa_minimization(struct dfa *d) {
  */
 void deduce_states(struct uints_array *table, struct int_array *states) {
     bool *done;
+    unsigned int current_state;
 
+    current_state = 0;
     done = (bool *) malloc(sizeof(bool) * states->len);
     set_all(done, states->len, false);
 
     for (size_t i = 0; i != states->len; i++) {
-        if (done[i] == false) {
-            states->ints[i] = i;
+        if (done[i] == true) {
+            continue;
+        } else {
+            states->ints[i] = current_state;
             done[i] = true;
         }
 
@@ -230,10 +240,11 @@ void deduce_states(struct uints_array *table, struct int_array *states) {
         // at index i
         for (size_t j = i + 1; j != states->len; j++) {
             if (eql_uint_array(table->rows[i], table->rows[j]) == true) {
-                states->ints[j] = i;
+                states->ints[j] = current_state;
                 done[j] = true;
             }
         }
+        current_state++;
     }
 
     free(done);
@@ -241,7 +252,7 @@ void deduce_states(struct uints_array *table, struct int_array *states) {
 
 
 void print_dfa(struct dfa *d) {
-    printf("states_count : %ud\n", d->states_count);
+    printf("states_count : %d\n", d->states_count);
 
     printf("final_states : ");
 
@@ -253,9 +264,9 @@ void print_dfa(struct dfa *d) {
 
     printf("\ntransitions : \n");
     for (size_t i = 0; i != d->func->len; i++) {
-        printf("\t%d, ", d->func->transitions[0].start_state);
-        printf("%c, ", d->func->transitions[0].symbol);
-        printf("%d\n", d->func->transitions[0].dest_state);
+        printf("\t%d, ", d->func->transitions[i].start_state);
+        printf("%c, ", d->func->transitions[i].symbol);
+        printf("%d\n", d->func->transitions[i].dest_state);
     }
 }
 
