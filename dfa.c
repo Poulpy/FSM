@@ -206,17 +206,29 @@ struct dfa *dfa_minimization(struct dfa *d) {
     return dfa_minimized;
 }
 
-// TODO
+/**
+ * Assign integers for arrays that are equal. The result is stocked in
+ * variable states
+ *
+ * Example:
+ * table = [[1, 1, 2], [0, 0, 0], [1, 1, 2]]
+ * The result will be:
+ * states = [0, 1, 0]
+ */
 void deduce_states(struct uints_array *table, struct int_array *states) {
-    bool *done = (bool *) malloc(sizeof(bool) * states->len);
-    set_all(done, states->len, false);
-    for (size_t i = 0; i != states->len; i++) {
+    bool *done;
 
+    done = (bool *) malloc(sizeof(bool) * states->len);
+    set_all(done, states->len, false);
+
+    for (size_t i = 0; i != states->len; i++) {
         if (done[i] == false) {
             states->ints[i] = i;
             done[i] = true;
         }
 
+        // for each row we check if the array at index j is equal to the array
+        // at index i
         for (size_t j = i + 1; j != states->len; j++) {
             if (eql_uint_array(table->rows[i], table->rows[j]) == true) {
                 states->ints[j] = i;
@@ -224,6 +236,7 @@ void deduce_states(struct uints_array *table, struct int_array *states) {
             }
         }
     }
+
     free(done);
 }
 
