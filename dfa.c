@@ -186,15 +186,21 @@ struct dfa *dfa_minimization(struct dfa *d) {
     // set all values to false
     set_all(done, new_states_count, false);
 
-
+    print_uint_array(states);
     // deduce final states
     for (size_t i = 0; i != states_count; i++) {
         // LEAK RIGHT HERE
-        if (*(done+states->ints[i]) == false && d->final_states[i] == true) {
-            new_final_states[states->ints[i]] = true;
-            *(done+states->ints[i]) = true;
+        int j = (int) states->ints[i];
+        printf("state %d\t", states->ints[i]);
+        //printf("done[%d] %d, ", done[j]);
+        //printf("done[%d] %d\n", *(done+states->ints[i]));
+        if (done[j] == false && d->final_states[i] == true) {
+            new_final_states[j] = true;
+            done[j] = true;
         }
     }
+
+    printf("--------------------------------");
 
     //dfa = new_dfa(len(states), alphabet, final_states, transitions);
     dfa_minimized = new_dfa(new_states_count);
