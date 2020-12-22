@@ -107,6 +107,7 @@ void free_dfa(struct dfa *d) {
 
 void free_function_array(struct function_array *fa) {
     free(fa->transitions);
+    free(fa);
 }
 
 void append_transition(struct function_array *fa, struct ftransition t) {
@@ -199,20 +200,27 @@ struct dfa *dfa_minimization(struct dfa *d) {
         }
     }
 
-    printf("--------------------------------");
+    printf("New states count %d\n", new_states_count);
+
 
     //dfa = new_dfa(len(states), alphabet, final_states, transitions);
     dfa_minimized = new_dfa(new_states_count);
     //dfa_minimized->alphabet = (unsigned char *) strdup((const char *) d->alphabet);
-    dfa_minimized->alphabet = (unsigned char *) malloc(sizeof(unsigned char) * strlen(d->alphabet) + 1);
+    dfa_minimized->alphabet = (unsigned char *) malloc(sizeof(d->alphabet));
     memcpy(dfa_minimized->alphabet, d->alphabet, sizeof(d->alphabet));
-    dfa_minimized->final_states = new_final_states;
-    dfa_minimized->func = new_function;
+    //memcpy(dfa_minimized->final_states, new_final_states, sizeof(new_final_states));// HERE
+    //dfa_minimized->final_states = new_final_states;
+
+    //dfa_minimized->func = new_function_array(new_function->len);
+    //memcpy(dfa_minimized->func, new_function, sizeof(new_function));// HERE
+    //dfa_minimized->func = new_function;
 
     free_uint_array(states);
     free_uint_array(states_before);
     free(done);
     free_uints_array(table);
+    free(new_final_states);
+    free_function_array(new_function);
 
     return dfa_minimized;
 }
