@@ -2,8 +2,8 @@
 #define UINT_ARRAY_H
 
 #include<stdbool.h>
-
-#include "stdlib.h"
+#include<stdlib.h>
+#include<stdio.h>
 
 // Array of unsigned integers
 struct int_array {
@@ -17,6 +17,7 @@ struct uints_array {
     size_t len;
 };
 
+void print_uint_array(struct int_array *ia);
 bool eql_uint_array(struct int_array *ia1, struct int_array *ia2);
 struct int_array *new_int_array(size_t len);
 unsigned int max_uint_array(struct int_array *ia);

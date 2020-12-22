@@ -77,6 +77,13 @@ void copy_uint_array(struct int_array *to, struct int_array *from) {
     }
 }
 
+void print_uint_array(struct int_array *ia) {
+    for (size_t i = 0; i != ia->len; i++) {
+        printf("%d ", ia->ints[i]);
+    }
+    puts("");
+}
+
 
 
 
@@ -107,6 +114,8 @@ void free_uints_array(struct uints_array *uia, size_t row) {
     for (size_t i = 0; i != row; i++) {
         free_uint_array(uia->rows[i]);
     }
+
+    free(uia->rows);
 
     free(uia);
 }
