@@ -42,22 +42,18 @@ void test_accept() {
 
 // leaks
 void test_deduce_states() {
-    struct int_array *ia1, *ia2, *states;
+    struct int_array *states;
     struct uints_array *uia;
     size_t rows;
 
     rows = 3;
-    ia1 = new_int_array(3);
-    ia2 = new_int_array(3);
     states = new_int_array(rows);
     uia = new_uints_array(rows, 3);
     for (size_t i = 0; i != 3; i++) {
-        ia1->ints[i] = 1;
-        ia2->ints[i] = 2;
+        uia->rows[0]->ints[i] = 1;
+        uia->rows[1]->ints[i] = 2;
+        uia->rows[2]->ints[i] = 2;
     }
-    memcpy(uia->rows[0], ia1, sizeof(struct int_array *));
-    memcpy(uia->rows[1], ia2, sizeof(struct int_array *));
-    memcpy(uia->rows[2], ia2, sizeof(struct int_array *));
     //uia->rows[1] = ia2;
     deduce_states(uia, states);
     if (states->ints[0] == 0 && states->ints[1] == 1
@@ -68,8 +64,6 @@ void test_deduce_states() {
     }
 
     free_uints_array(uia, rows);
-    free_uint_array(ia1);
-    free_uint_array(ia2);
     free_uint_array(states);
 }
 

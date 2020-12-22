@@ -224,6 +224,7 @@ void deduce_states(struct uints_array *table, struct int_array *states) {
             }
         }
     }
+    free(done);
 }
 
 
