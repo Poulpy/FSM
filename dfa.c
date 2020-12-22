@@ -156,9 +156,8 @@ struct dfa *dfa_minimization(struct dfa *d) {
         z++;
     }
 
-    new_states_count = max_uint_array(states);
-    printf("New states count : %d\n", new_states_count);
-    print_uint_array(states);
+    // initial state is 0, so we add 1
+    new_states_count = max_uint_array(states) + 1;
 
     done = (bool *) malloc(sizeof(bool) * new_states_count);
     new_final_states = (bool *) malloc(sizeof(bool) * new_states_count);
@@ -171,29 +170,29 @@ struct dfa *dfa_minimization(struct dfa *d) {
     // i : symbol
     // j : start state
     for (size_t j = 0; j != table->len; j++) {
+        int z;
         for (size_t i = 0; i != strlen(d->alphabet); i++) {
+            z = (int) states->ints[j];
             trans = new_ftransition(states->ints[j], d->alphabet[i], table->rows[j]->ints[i]);
+
 
             // Since some columns may be redundant, we check in a boolean
             // array if we already checked them
-            if (*(done+states->ints[j]) == false) {
+            if (done[z] == false) {
                 new_function->transitions[i + j] = trans;
             }
         }
-        *(done+states->ints[j]) = true;
+        done[z] = true;
     }
 
     // set all values to false
     set_all(done, new_states_count, false);
 
-    print_uint_array(states);
     // deduce final states
     for (size_t i = 0; i != states_count; i++) {
         // LEAK RIGHT HERE
         int j = (int) states->ints[i];
-        printf("state %d\t", states->ints[i]);
-        //printf("done[%d] %d, ", done[j]);
-        //printf("done[%d] %d\n", *(done+states->ints[i]));
+        //printf("done[%d] %d\n", j, done[j]);
         if (done[j] == false && d->final_states[i] == true) {
             new_final_states[j] = true;
             done[j] = true;
@@ -205,6 +204,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
     //dfa = new_dfa(len(states), alphabet, final_states, transitions);
     dfa_minimized = new_dfa(new_states_count);
     //dfa_minimized->alphabet = (unsigned char *) strdup((const char *) d->alphabet);
+    dfa_minimized->alphabet = (unsigned char *) malloc(sizeof(unsigned char) * strlen(d->alphabet) + 1);
     memcpy(dfa_minimized->alphabet, d->alphabet, sizeof(d->alphabet));
     dfa_minimized->final_states = new_final_states;
     dfa_minimized->func = new_function;
