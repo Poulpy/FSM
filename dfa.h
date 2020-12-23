@@ -42,6 +42,7 @@ bool eql_ftransition(struct ftransition f1, struct ftransition f2);
 struct ftransition null_transition();
 struct function_array *new_function_array(size_t len);
 void append_transition(struct function_array *fa, struct ftransition t);
+void print_transitions(struct function_array *fa);
 void free_function_array(struct function_array *fa);
 
 void deduce_states(struct uints_array *table, struct int_array *states);

@@ -142,23 +142,29 @@ struct dfa *dfa_minimization(struct dfa *d) {
         }
     }
 
+    printf("Loop\n");
     z = 0;
     // We loop till we reach the same conclusion twice
-    while (z < 2 && eql_uint_array(states_before, states) == false) {
+    while (z < 2 || eql_uint_array(states_before, states) == false) {
+        copy_uint_array(states_before, states);
         for (size_t start_state = 0; start_state != states_count; start_state++) {
             for (size_t s = 0; s != strlen(d->alphabet); s++) {
                 trans = find_transition_with_start_state_and_symbol(d, start_state, d->alphabet[s]);
-                printf("(%d %c %d)\n", trans.start_state, trans.symbol, trans.dest_state);
+                //printf("%d %c %d\n", trans.start_state, trans.symbol, trans.dest_state);
                 table->rows[start_state]->ints[s] = states->ints[trans.dest_state];
             }
         }
         deduce_states(table, states);
-        copy_uint_array(states_before, states);
+
         z++;
+        printf("z %d\t", z);
+        printf("%d %d\n", eql_uint_array(states_before, states), false);
     }
 
     // initial state is 0, so we add 1
-    new_states_count = max_uint_array(states) + 1;
+    //print_uint_array(states);
+    new_states_count = states->ints[states_count - 1] + 1;
+    print_uints_array(table);
 
     done = (bool *) malloc(sizeof(bool) * new_states_count);
     new_final_states = (bool *) malloc(sizeof(bool) * new_states_count);
@@ -170,18 +176,28 @@ struct dfa *dfa_minimization(struct dfa *d) {
     // We create the transitions
     // i : symbol
     // j : start state
+    printf("TABLE LEN %d\n", table->len);
+    printf("%s\n", d->alphabet);
+    printf("strlen alpabet %d\n", strlen((char *) d->alphabet));
+
     for (size_t j = 0; j != table->len; j++) {
         int z;
+        //printf("zefzefze\n");
+
         for (size_t i = 0; i != strlen(d->alphabet); i++) {
+            // Since some columns may be redundant, we check in a boolean
+            // array if we already checked them
             z = (int) states->ints[j];
+            if (done[z] == true) {
+                continue;
+            }
+
+            //printf("nnooppi\n");
+            printf("%d %c %d\n", states->ints[j], d->alphabet[i], table->rows[j]->ints[i]);
             trans = new_ftransition(states->ints[j], d->alphabet[i], table->rows[j]->ints[i]);
 
 
-            // Since some columns may be redundant, we check in a boolean
-            // array if we already checked them
-            if (done[z] == false) {
-                new_function->transitions[i + j] = trans;
-            }
+            new_function->transitions[i + j] = trans;
         }
         done[z] = true;
     }
@@ -191,28 +207,27 @@ struct dfa *dfa_minimization(struct dfa *d) {
 
     // deduce final states
     for (size_t i = 0; i != states_count; i++) {
-        // LEAK RIGHT HERE
         int j = (int) states->ints[i];
-        //printf("done[%d] %d\n", j, done[j]);
+
         if (done[j] == false && d->final_states[i] == true) {
             new_final_states[j] = true;
             done[j] = true;
         }
     }
 
-    printf("New states count %d\n", new_states_count);
 
-
-    //dfa = new_dfa(len(states), alphabet, final_states, transitions);
     dfa_minimized = new_dfa(new_states_count);
-    //dfa_minimized->alphabet = (unsigned char *) strdup((const char *) d->alphabet);
     dfa_minimized->alphabet = (unsigned char *) malloc(sizeof(d->alphabet));
     memcpy(dfa_minimized->alphabet, d->alphabet, sizeof(d->alphabet));
-    //memcpy(dfa_minimized->final_states, new_final_states, sizeof(new_final_states));// HERE
+    memcpy(dfa_minimized->final_states, new_final_states, sizeof(new_final_states));// HERE
     //dfa_minimized->final_states = new_final_states;
 
     //dfa_minimized->func = new_function_array(new_function->len);
-    //memcpy(dfa_minimized->func, new_function, sizeof(new_function));// HERE
+    dfa_minimized->func = (struct function_array *) malloc(sizeof(struct function_array));
+    dfa_minimized->func->transitions = (struct ftransition *) malloc(sizeof(struct ftransition) * new_function->len);
+    //print_transitions(new_function);
+    memcpy(dfa_minimized->func, new_function, sizeof(new_function));// HERE
+    //print_dfa(dfa_minimized);
     //dfa_minimized->func = new_function;
 
     free_uint_array(states);
@@ -281,6 +296,15 @@ void print_dfa(struct dfa *d) {
         printf("\t%d, ", d->func->transitions[i].start_state);
         printf("%c, ", d->func->transitions[i].symbol);
         printf("%d\n", d->func->transitions[i].dest_state);
+    }
+}
+
+void print_transitions(struct function_array *fa) {
+    printf("\ntransitions : \n");
+    for (size_t i = 0; i != fa->len; i++) {
+        printf("\t%d, ", fa->transitions[i].start_state);
+        printf("%c, ", fa->transitions[i].symbol);
+        printf("%d\n", fa->transitions[i].dest_state);
     }
 }
 

@@ -77,6 +77,7 @@ void test_dfa_minimization() {
     d->alphabet = (unsigned char *) malloc(sizeof(unsigned char) * 3);
     d->alphabet[0] = 'a';
     d->alphabet[1] = 'b';
+    d->alphabet[2] = '\0';
     d->func = new_function_array(16);
 
     d->func->transitions[0] = (struct ftransition) { 0, 'a', 1 };
@@ -97,6 +98,7 @@ void test_dfa_minimization() {
     d->func->transitions[15] = (struct ftransition) { 7, 'b', 7 };
     print_dfa(d);
     minimized_dfa = dfa_minimization(d);
+    //print_dfa(minimized_dfa);
     free_dfa(d);
     free(minimized_dfa);
 }

@@ -8,8 +8,8 @@
 struct int_array *new_int_array(size_t len) {
     struct int_array *ia;
 
-    ia = (struct int_array *) malloc(sizeof(struct int_array));
-    ia->ints = (int *) malloc(sizeof(int) * len);
+    ia = (struct int_array *) calloc(sizeof(struct int_array), 1);
+    ia->ints = (int *) calloc(sizeof(int), len);
     ia->len = len;
 
     return ia;
@@ -84,6 +84,12 @@ void print_uint_array(struct int_array *ia) {
     puts("");
 }
 
+void print_uints_array(struct uints_array *uia) {
+    for (size_t i = 0; i != uia->len; i++) {
+        print_uint_array(uia->rows[i]);
+    }
+}
+
 
 
 
@@ -102,6 +108,8 @@ struct uints_array *new_uints_array(size_t row, size_t col) {
     for (size_t i = 0; i != row; i++) {
         uia->rows[i] = new_int_array(col);
     }
+
+    uia->len = row;
 
     return uia;
 }
