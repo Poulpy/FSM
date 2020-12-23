@@ -226,16 +226,16 @@ struct dfa *dfa_minimization(struct dfa *d) {
     dfa_minimized->func = (struct function_array *) malloc(sizeof(struct function_array));
     dfa_minimized->func->transitions = (struct ftransition *) malloc(sizeof(struct ftransition) * new_function->len);
     print_transitions(new_function);
-    memcpy(dfa_minimized->func, new_function, sizeof(new_function));// HERE
+    //memcpy(dfa_minimized->func, new_function, sizeof(new_function));// HERE
     //print_dfa(dfa_minimized);
-    //dfa_minimized->func = new_function;
+    dfa_minimized->func = new_function;
 
     free_uint_array(states);
     free_uint_array(states_before);
     free(done);
     free_uints_array(table);
     free(new_final_states);
-    free_function_array(new_function);
+    //free_function_array(new_function);
 
     return dfa_minimized;
 }

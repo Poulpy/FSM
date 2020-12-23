@@ -98,7 +98,7 @@ void test_dfa_minimization() {
     d->func->transitions[15] = (struct ftransition) { 7, 'b', 7 };
     print_dfa(d);
     minimized_dfa = dfa_minimization(d);
-    //print_dfa(minimized_dfa);
+    print_dfa(minimized_dfa);
     free_dfa(d);
     free(minimized_dfa);
 }
