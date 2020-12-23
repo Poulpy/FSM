@@ -121,11 +121,10 @@ struct dfa *dfa_minimization(struct dfa *d) {
     struct uints_array *table;
     struct ftransition trans;
     struct int_array *states, *states_before;
-    bool *done;//, *new_final_states;
+    bool *done;
     unsigned int new_states_count, states_count;
     struct dfa *dfa_minimized;
-    //struct function_array *new_function;
-    size_t z;
+    size_t z, y;
 
 
     states = new_int_array(d->states_count);
@@ -163,16 +162,13 @@ struct dfa *dfa_minimization(struct dfa *d) {
     dfa_minimized = new_dfa(new_states_count);
     dfa_minimized->func = new_function_array(new_states_count * strlen(d->alphabet));
     done = (bool *) malloc(sizeof(bool) * new_states_count);
-    //new_final_states = (bool *) malloc(sizeof(bool) * new_states_count);
 
     // set all values to false
     set_all(done, new_states_count, false);
-    //new_function = new_function_array();
 
     // We create the transitions
     // i : symbol
     // j : start state
-    size_t y;
     y = 0;
     for (size_t j = 0; j != table->len; j++) {
         int z;
@@ -208,19 +204,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
 
 
     dfa_minimized->alphabet = (unsigned char *) calloc(1, strlen(d->alphabet) + 1);
-    //memset(dfa_minimized->alphabet, '\0', sizeof(dfa_minimized->alphabet));
-    //memmove(dfa_minimized->alphabet, d->alphabet, sizeof(d->alphabet));
     strcpy(dfa_minimized->alphabet, d->alphabet);
-    //memcpy(dfa_minimized->final_states, new_final_states, sizeof(new_final_states));// HERE
-    //dfa_minimized->final_states = new_final_states;
-
-    //dfa_minimized->func = new_function_array(new_function->len);
-    //dfa_minimized->func = (struct function_array *) malloc(sizeof(struct function_array));
-    //dfa_minimized->func->transitions = (struct ftransition *) malloc(sizeof(struct ftransition) * new_function->len);
-    //print_transitions(new_function);
-    //memcpy(dfa_minimized->func, new_function, sizeof(new_function));// HERE
-    //print_dfa(dfa_minimized);
-    //dfa_minimized->func = new_function;
 
     free_uint_array(states);
     free_uint_array(states_before);
