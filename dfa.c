@@ -110,45 +110,38 @@ void free_function_array(struct function_array *fa) {
     free(fa);
 }
 
-void append_transition(struct function_array *fa, struct ftransition t) {
-    fa->transitions = realloc(fa->transitions, sizeof(struct ftransition) * (fa->len + 1));
-    fa->transitions[fa->len] = t;
-    fa->len++;
-}
-
-
 struct dfa *dfa_minimization(struct dfa *d) {
-    struct uints_array *table;
+    struct uintvv *table;
     struct ftransition trans;
-    struct int_array *states, *states_before;
+    struct uintv *states, *states_before;
     bool *done;
     unsigned int new_states_count, states_count;
     struct dfa *dfa_minimized;
     size_t z, y;
 
 
-    states = new_int_array(d->states_count);
-    states_before = new_int_array(d->states_count);
+    states = new_uintv(d->states_count);
+    states_before = new_uintv(d->states_count);
     states_count = d->states_count;
-    table = new_uints_array(states_count, strlen(d->alphabet));
+    table = new_uintvv(states_count, strlen(d->alphabet));
 
     // initialization
     for (size_t i = 0; i != states_count; i++) {
         if (d->final_states[i] == true) {
-            states->ints[i] = 1;
+            states->v[i] = 1;
         } else {
-            states->ints[i] = 0;
+            states->v[i] = 0;
         }
     }
 
     z = 0;
     // We loop till we reach the same conclusion twice
-    while (z < 2 || eql_uint_array(states_before, states) == false) {
-        copy_uint_array(states_before, states);
+    while (z < 2 || eql_uintv(states_before, states) == false) {
+        copy_uintv(states_before, states);
         for (size_t start_state = 0; start_state != states_count; start_state++) {
             for (size_t s = 0; s != strlen(d->alphabet); s++) {
                 trans = find_transition_with_start_state_and_symbol(d, start_state, d->alphabet[s]);
-                table->rows[start_state]->ints[s] = states->ints[trans.dest_state];
+                table->vv[start_state]->v[s] = states->v[trans.dest_state];
             }
         }
         deduce_states(table, states);
@@ -157,7 +150,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
     }
 
     // initial state is 0, so we add 1
-    new_states_count = states->ints[states_count - 1] + 1;
+    new_states_count = states->v[states_count - 1] + 1;
 
     dfa_minimized = new_dfa(new_states_count);
     dfa_minimized->func = new_function_array(new_states_count * strlen(d->alphabet));
@@ -175,12 +168,12 @@ struct dfa *dfa_minimization(struct dfa *d) {
 
         // Since some columns may be redundant, we check in a boolean
         // array if we already checked them
-        z = (int) states->ints[j];
+        z = (int) states->v[j];
         if (done[z] == true) {
             continue;
         }
         for (size_t i = 0; i != strlen(d->alphabet); i++) {
-            trans = new_ftransition(states->ints[j], d->alphabet[i], table->rows[j]->ints[i]);
+            trans = new_ftransition(states->v[j], d->alphabet[i], table->vv[j]->v[i]);
 
             dfa_minimized->func->transitions[y] = trans;
             y++;
@@ -193,7 +186,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
 
     // deduce final states
     for (size_t i = 0; i != states_count; i++) {
-        int j = (int) states->ints[i];
+        int j = (int) states->v[i];
 
         if (done[j] == false && d->final_states[i] == true) {
             dfa_minimized->final_states[j] = true;
@@ -206,12 +199,18 @@ struct dfa *dfa_minimization(struct dfa *d) {
     dfa_minimized->alphabet = (unsigned char *) calloc(1, strlen(d->alphabet) + 1);
     strcpy(dfa_minimized->alphabet, d->alphabet);
 
-    free_uint_array(states);
-    free_uint_array(states_before);
+    free_uintv(states);
+    free_uintv(states_before);
     free(done);
-    free_uints_array(table);
+    free_uintvv(table);
 
     return dfa_minimized;
+}
+
+void append_transition(struct function_array *fa, struct ftransition t) {
+    fa->transitions = realloc(fa->transitions, sizeof(struct ftransition) * (fa->len + 1));
+    fa->transitions[fa->len] = t;
+    fa->len++;
 }
 
 /**
@@ -223,7 +222,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
  * The result will be:
  * states = [0, 1, 0]
  */
-void deduce_states(struct uints_array *table, struct int_array *states) {
+void deduce_states(struct uintvv *table, struct uintv *states) {
     bool *done;
     unsigned int current_state;
 
@@ -235,15 +234,15 @@ void deduce_states(struct uints_array *table, struct int_array *states) {
         if (done[i] == true) {
             continue;
         } else {
-            states->ints[i] = current_state;
+            states->v[i] = current_state;
             done[i] = true;
         }
 
         // for each row we check if the array at index j is equal to the array
         // at index i
         for (size_t j = i + 1; j != states->len; j++) {
-            if (eql_uint_array(table->rows[i], table->rows[j]) == true) {
-                states->ints[j] = current_state;
+            if (eql_uintv(table->vv[i], table->vv[j]) == true) {
+                states->v[j] = current_state;
                 done[j] = true;
             }
         }

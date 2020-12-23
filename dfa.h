@@ -7,7 +7,6 @@
 #include<stdio.h>
 #include<string.h>
 
-#include "int_array.h"
 #include "uintv.h"
 
 // deterministic finite automaton
@@ -46,7 +45,7 @@ void append_transition(struct function_array *fa, struct ftransition t);
 void print_transitions(struct function_array *fa);
 void free_function_array(struct function_array *fa);
 
-void deduce_states(struct uints_array *table, struct int_array *states);
+void deduce_states(struct uintvv *table, struct uintv *states);
 
 unsigned char *get_ascii_table();
 void set_all(bool *bool_array, size_t len, bool value);

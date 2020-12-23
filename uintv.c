@@ -80,8 +80,8 @@ struct uintvv *new_uintvv(size_t vvlen, size_t vlen) {
     uint_matrix = (struct uintvv *) malloc(sizeof(struct uintvv));
     uint_matrix->vv = (struct uintv **) malloc(sizeof(struct uintv *) * vvlen);
 
-    for (size_t i = 0; i != row; i++) {
-        uint_matrix->vv[i] = new_int_array(vlen);
+    for (size_t i = 0; i != vvlen; i++) {
+        uint_matrix->vv[i] = new_uintv(vlen);
     }
 
     uint_matrix->len = vvlen;
@@ -96,7 +96,7 @@ struct uintvv *new_uintvv(size_t vvlen, size_t vlen) {
  */
 void free_uintvv(struct uintvv *uint_matrix) {
     for (size_t i = 0; i != uint_matrix->len; i++) {
-        free_uint_array(uint_matrix->vv[i]);
+        free_uintv(uint_matrix->vv[i]);
     }
 
     free(uint_matrix->vv);

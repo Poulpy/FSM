@@ -13,7 +13,7 @@ struct uintv {
 
 // Vector of vectors unsigned int
 struct uintvv {
-    struct uintv **v;
+    struct uintv **vv;
     size_t len;
 };
 

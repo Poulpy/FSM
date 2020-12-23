@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdbool.h>
 #include "dfa.h"
+#include "uintv.h"
 
 void test_accept() {
     struct dfa *d;
@@ -41,29 +42,29 @@ void test_accept() {
 }
 
 void test_deduce_states() {
-    struct int_array *states;
-    struct uints_array *uia;
+    struct uintv *states;
+    struct uintvv *uia;
     size_t rows;
 
     rows = 3;
-    states = new_int_array(rows);
-    uia = new_uints_array(rows, rows);
+    states = new_uintv(rows);
+    uia = new_uintvv(rows, rows);
 
     for (size_t i = 0; i != 3; i++) {
-        uia->rows[0]->ints[i] = 1;
-        uia->rows[1]->ints[i] = 2;
-        uia->rows[2]->ints[i] = 2;
+        uia->vv[0]->v[i] = 1;
+        uia->vv[1]->v[i] = 2;
+        uia->vv[2]->v[i] = 2;
     }
 
     deduce_states(uia, states);
-    if (states->ints[0] == 0 && states->ints[1] == 1 && states->ints[2] == 1) {
+    if (states->v[0] == 0 && states->v[1] == 1 && states->v[2] == 1) {
         printf("OK\n");
     } else {
         printf("KO\n");
     }
 
-    free_uints_array(uia);
-    free_uint_array(states);
+    free_uintvv(uia);
+    free_uintv(states);
 }
 
 void test_dfa_minimization() {
