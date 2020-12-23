@@ -51,12 +51,8 @@ struct ftransition null_transition() {
 }
 
 bool eql_ftransition(struct ftransition f1, struct ftransition f2) {
-    if (f1.start_state == f2.start_state
-        && f1.symbol == f2.symbol && f1.dest_state == f2.dest_state)
-
-        return true;
-    else
-        return false;
+    return (f1.start_state == f2.start_state
+            && f1.symbol == f2.symbol && f1.dest_state == f2.dest_state);
 }
 
 struct ftransition find_transition_with_start_state_and_symbol(struct dfa *d,

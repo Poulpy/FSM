@@ -106,7 +106,7 @@ void test_dfa_minimization() {
 
 int main() {
     test_accept();
-    //test_deduce_states(); memleaks
+    test_deduce_states();
     test_dfa_minimization();
 
     return 0;
