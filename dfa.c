@@ -1,5 +1,10 @@
 #include "dfa.h"
 
+/**
+ * Initialize a new automaton with a set number of states
+ *
+ * Note: don't forget to free
+ */
 struct dfa *new_dfa(unsigned int states_count) {
     struct dfa *d;
 
@@ -13,6 +18,8 @@ struct dfa *new_dfa(unsigned int states_count) {
 }
 
 /**
+ * Return an ftransition
+ *
  * Note: don't forget to free
  */
 struct ftransition new_ftransition(unsigned int start_state, unsigned char c,
@@ -21,6 +28,9 @@ struct ftransition new_ftransition(unsigned int start_state, unsigned char c,
     return (struct ftransition) { start_state, c, dest_state };
 }
 
+/**
+ * Checks if word can be accepted by the automaton d
+ */
 bool accept(struct dfa *d, unsigned char *word) {
     unsigned int current_state;
     bool is_accepted;
@@ -43,7 +53,8 @@ bool accept(struct dfa *d, unsigned char *word) {
         i++;
     }
 
-    return is_accepted;
+    // Check if current_state is a final state
+    return (is_accepted && d->final_states[current_state]);
 }
 
 struct ftransition null_transition() {

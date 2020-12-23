@@ -38,6 +38,7 @@ struct ftransition find_transition_with_start_state_and_symbol(struct dfa *d, un
 void free_dfa(struct dfa *d);
 void print_dfa(struct dfa *d);
 
+struct ftransition new_ftransition(unsigned int start_state, unsigned char c, unsigned int dest_state);
 bool eql_ftransition(struct ftransition f1, struct ftransition f2);
 struct ftransition null_transition();
 struct function_array *new_function_array(size_t len);
