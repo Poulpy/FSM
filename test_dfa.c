@@ -17,7 +17,7 @@ void test_accept() {
     d->func = new_function_array(1);
 
     append_transition(d->func, t);
-    if (accept(d, "b") == true) {
+    if (accept(d, "b")) {
         printf("OK\n");
     } else {
         printf("KO\n");

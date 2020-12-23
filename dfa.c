@@ -31,7 +31,7 @@ bool accept(struct dfa *d, unsigned char *word) {
     i = 0;
     is_accepted = true;
 
-    while (is_accepted == true && i != strlen(word)) {
+    while (is_accepted && i != strlen(word)) {
         transition = find_transition_with_start_state_and_symbol(d, current_state, word[i]);
 
         if (eql_ftransition(null_transition(), transition)) {
@@ -127,7 +127,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
 
     // initialization
     for (size_t i = 0; i != states_count; i++) {
-        if (d->final_states[i] == true) {
+        if (d->final_states[i]) {
             states->v[i] = 1;
         } else {
             states->v[i] = 0;
@@ -136,7 +136,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
 
     z = 0;
     // We loop till we reach the same conclusion twice
-    while (z < 2 || eql_uintv(states_before, states) == false) {
+    while (z < 2 || !eql_uintv(states_before, states)) {
         copy_uintv(states_before, states);
         for (size_t start_state = 0; start_state != states_count; start_state++) {
             for (size_t s = 0; s != strlen(d->alphabet); s++) {
@@ -169,7 +169,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
         // Since some columns may be redundant, we check in a boolean
         // array if we already checked them
         z = (int) states->v[j];
-        if (done[z] == true) {
+        if (done[z]) {
             continue;
         }
         for (size_t i = 0; i != strlen(d->alphabet); i++) {
@@ -188,7 +188,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
     for (size_t i = 0; i != states_count; i++) {
         int j = (int) states->v[i];
 
-        if (done[j] == false && d->final_states[i] == true) {
+        if (!done[j] && d->final_states[i]) {
             dfa_minimized->final_states[j] = true;
             done[j] = true;
         }
@@ -231,7 +231,7 @@ void deduce_states(struct uintvv *table, struct uintv *states) {
     set_all(done, states->len, false);
 
     for (size_t i = 0; i != states->len; i++) {
-        if (done[i] == true) {
+        if (done[i]) {
             continue;
         } else {
             states->v[i] = current_state;
@@ -241,7 +241,7 @@ void deduce_states(struct uintvv *table, struct uintv *states) {
         // for each row we check if the array at index j is equal to the array
         // at index i
         for (size_t j = i + 1; j != states->len; j++) {
-            if (eql_uintv(table->vv[i], table->vv[j]) == true) {
+            if (eql_uintv(table->vv[i], table->vv[j])) {
                 states->v[j] = current_state;
                 done[j] = true;
             }
