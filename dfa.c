@@ -61,6 +61,10 @@ struct ftransition null_transition() {
     return (struct ftransition) { 0 , 0, 0 };
 }
 
+/**
+ * Checks if 2 transitions are the same
+ * TODO use memcmp, overkill but awesome af
+ */
 bool eql_ftransition(struct ftransition f1, struct ftransition f2) {
     return (f1.start_state == f2.start_state
             && f1.symbol == f2.symbol && f1.dest_state == f2.dest_state);
@@ -117,6 +121,19 @@ void free_function_array(struct function_array *fa) {
     free(fa);
 }
 
+/**
+ * Minimize a deterministic finite automaton
+ *
+ * 1) Assign a number to each state (1 if final, else 0)
+ * 2) Write a table of the transitions using the number in step 1
+ * 3) Check which states have the same transitions for all symbols, and assign
+ * the same number for those states
+ * 4) Repeat till we got a steady result (states)
+ * 5) We create the transitions using the table before
+ * 6) We check which among the new states are final states
+ *
+ * TODO refactor this, way too big
+ */
 struct dfa *dfa_minimization(struct dfa *d) {
     struct uintvv *table;
     struct ftransition trans;
@@ -347,7 +364,7 @@ struct dfa *nfa_to_dfa(af_s *afn) {
 #endif
 
 
-// utils
+// TODO put in utils, totally unrelated here
 unsigned char *get_ascii_table() {
     unsigned char *ascii_table;
 
@@ -359,6 +376,11 @@ unsigned char *get_ascii_table() {
     return ascii_table;
 }
 
+/**
+ * Set all values of an array of boolean
+ *
+ * TODO do a struct boolv for boolean vectors
+ */
 void set_all(bool *bool_array, size_t len, bool value) {
     for (size_t i = 0; i != len; i++) {
         bool_array[i] = value;
