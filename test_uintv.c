@@ -78,11 +78,23 @@ void test_eql_uintv() {
     free_uintv(v3);
 }
 
+void test_new_uintv_and_fill() {
+    struct uintv *v1;
+
+    v1 = new_uintv_and_fill(3, 2, 3, 4);
+    if (v1->v[0] == 2 && v1->v[1] == 3 && v1->v[2] == 4) {
+        puts("OK");
+    } else {
+        puts("KO");
+    }
+}
+
 int main()
 {
     test_concat();
     test_copy_uintv();
     test_eql_uintv();
+    test_new_uintv_and_fill();
 
     return 0;
 }

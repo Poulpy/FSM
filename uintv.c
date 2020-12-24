@@ -16,6 +16,31 @@ struct uintv *new_uintv(size_t len) {
 }
 
 /**
+ * Initialize a vector of unsigned int of length len and fill it with the values
+ * given (variable number of arguments)
+ *
+ * Example: new_uintv_and_fill(3, 1, 0, 8) gives [1, 0, 8]
+ * Note: don't forget to free
+ */
+struct uintv *new_uintv_and_fill(size_t len, ...) {
+    struct uintv *uint_vector;
+    va_list ap;
+
+    uint_vector = (struct uintv *) calloc(sizeof(struct uintv), 1);
+    uint_vector->v = (unsigned int *) calloc(sizeof(unsigned int), len);
+    uint_vector->len = len;
+
+    // filling the array with the values ...
+    va_start(ap, len);
+    for (size_t i = 0; i <= len; i++)  {
+        uint_vector->v[i] = va_arg(ap, unsigned int);
+    }
+    va_end(ap);
+
+    return uint_vector;
+}
+
+/**
  * Checks if 2 arrays are equal
  *
  * Note: Both arrays must be of same length
