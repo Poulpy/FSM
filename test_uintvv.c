@@ -57,12 +57,12 @@ void test_append_uintvv() {
     v = new_uintv_and_fill(5, 3, 4, 1, 1, 1);
     append_uintvv(m, v);
 
-/*
+
     if (m->len == 3 && eql_uintv(m->vv[2], v)) {
         puts("OK");
     } else {
         puts("KO");
-    }*/
+    }
 
     free_uintv(v);
     free_uintvv(m);
