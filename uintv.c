@@ -55,12 +55,11 @@ void print_uintv(struct uintv *uint_vector) {
  * Copy the values of an array into another
  *
  * Note: both arrays must be of same length
- * TODO: try memcpy ?
  */
 void copy_uintv(struct uintv *to, struct uintv *from) {
     if (to->len != from->len) return;
 
-    memcpy(to->v, from->v, sizeof(to->v));
+    memcpy(to->v, from->v, sizeof(from->v));
 }
 
 /**
@@ -68,8 +67,6 @@ void copy_uintv(struct uintv *to, struct uintv *from) {
  *
  * Concatenate the vector to_add to the vector uint_vector
  * Example: concat_uintv([1, 2], [4, 2]) gives [1, 2, 4, 2]
- *
- * TODO try memcpy
  */
 void concat_uintv(struct uintv *uint_vector, struct uintv *to_add) {
     size_t new_len, old_len;
@@ -77,11 +74,9 @@ void concat_uintv(struct uintv *uint_vector, struct uintv *to_add) {
     old_len = uint_vector->len;
     new_len = old_len + to_add->len;
     uint_vector->v = (unsigned int *) realloc(uint_vector->v, sizeof(unsigned int) * new_len);
-    uint_vector->len++;
+    uint_vector->len = new_len;
 
-    for (size_t j = old_len, i = 0; j != new_len; j++, i++) {
-        uint_vector->v[j] = to_add->v[i];
-    }
+    memcpy(&uint_vector->v[old_len], to_add->v, sizeof(to_add->v));
 }
 
 
