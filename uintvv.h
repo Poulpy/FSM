@@ -9,10 +9,10 @@ struct uintvv {
     size_t len;
 };
 
+size_t get_index_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector);
 struct uintvv *new_uintvv(size_t vvlen, size_t vlen);
+void append_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector);
 void free_uintvv(struct uintvv *uint_matrix);
 void print_uintvv(struct uintvv *uint_matrix);
-size_t get_index_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector);
-void append_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector);
 
 #endif

@@ -65,7 +65,25 @@ void copy_uintv(struct uintv *to, struct uintv *from) {
     }
 }
 
+/**
+ * concat_uintv
+ *
+ * Concatenate the vector to_add to the vector uint_vector
+ * Example: concat_uintv([1, 2], [4, 2]) gives [1, 2, 4, 2]
+ *
+ * TODO try memcpy
+ */
+void concat_uintv(struct uintv *uint_vector, struct uintv *to_add) {
+    size_t new_len, old_len;
 
+    old_len = uint_vector->len;
+    new_len = old_len + to_add->len;
+    uint_vector->v = (unsigned int *) realloc(uint_vector->v, sizeof(unsigned int) * new_len);
+
+    for (size_t j = old_len, i = 0; j != new_len; j++, i++) {
+        uint_vector->v[j] = to_add->v[i];
+    }
+}
 
 
 
