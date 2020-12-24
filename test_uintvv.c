@@ -18,8 +18,40 @@ void test_new_uintvv_and_fill() {
     free_uintvv(m);
 }
 
+void test_get_index_uintvv() {
+    struct uintvv *m;
+    struct uintv *v1, *v2, *v3;
+
+    m = new_uintvv_and_fill(2, 2, 1, 9, 3, 4);
+    v1 = new_uintv_and_fill(2, 1, 9);
+    v2 = new_uintv_and_fill(2, 3, 4);
+    v3 = new_uintv_and_fill(2, 9, 3);
+
+    if (get_index_uintvv(m, v1) == 0) {
+        puts("OK");
+    } else {
+        puts("KO");
+    }
+    if (get_index_uintvv(m, v2) == 1) {
+        puts("OK");
+    } else {
+        puts("KO");
+    }
+    if (get_index_uintvv(m, v3) == m->len) {
+        puts("OK");
+    } else {
+        puts("KO");
+    }
+
+    free_uintvv(m);
+    free_uintv(v1);
+    free_uintv(v2);
+    free_uintv(v3);
+}
+
 int main() {
     test_new_uintvv_and_fill();
+    test_get_index_uintvv();
 
     return 0;
 }
