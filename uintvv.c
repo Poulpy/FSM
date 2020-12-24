@@ -45,3 +45,21 @@ void print_uintvv(struct uintvv *uint_matrix) {
         print_uintv(uint_matrix->vv[i]);
     }
 }
+
+/**
+ * get_index_uintvv
+ *
+ * Returns the index where the value uint_vector
+ * If the value is not found, it returns the length of uint_matrix
+ * can't return -1 since the type is a size_t (unsigned int)
+ */
+size_t get_index_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector) {
+    for (size_t i = 0; i != uint_matrix->len; i++) {
+        if (eql_uintv(uint_matrix->vv[i], uint_vector)) {
+            return i;
+        }
+    }
+
+    return uint_matrix->len;
+}
+
