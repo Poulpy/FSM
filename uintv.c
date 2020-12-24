@@ -19,18 +19,11 @@ struct uintv *new_uintv(size_t len) {
  * Checks if 2 arrays are equal
  *
  * Note: Both arrays must be of same length
- * TODO: try memcmp ?
  */
 bool eql_uintv(struct uintv *uint_vector1, struct uintv *uint_vector2) {
     if (uint_vector1->len != uint_vector2->len) return false;
 
-    for (size_t i = 0; i != uint_vector1->len; i++) {
-        if (uint_vector1->v[i] != uint_vector2->v[i]) {
-            return false;
-        }
-    }
-
-    return true;
+    return (memcmp(uint_vector1->v, uint_vector2->v, sizeof(uint_vector1->len)) == 0);
 }
 
 /**
