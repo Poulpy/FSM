@@ -49,9 +49,29 @@ void test_get_index_uintvv() {
     free_uintv(v3);
 }
 
+void test_append_uintvv() {
+    struct uintvv *m;
+    struct uintv *v;
+
+    m = new_uintvv_and_fill(2, 2, 3, 4, 5, 6);
+    v = new_uintv_and_fill(5, 3, 4, 1, 1, 1);
+    append_uintvv(m, v);
+
+/*
+    if (m->len == 3 && eql_uintv(m->vv[2], v)) {
+        puts("OK");
+    } else {
+        puts("KO");
+    }*/
+
+    free_uintv(v);
+    free_uintvv(m);
+}
+
 int main() {
     test_new_uintvv_and_fill();
     test_get_index_uintvv();
+    test_append_uintvv();
 
     return 0;
 }

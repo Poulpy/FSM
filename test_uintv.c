@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include "uintv.h"
 
-void test_concat() {
+void test_concat_uintv() {
     struct uintv *v1, *v2;
 
     v1 = new_uintv(1);

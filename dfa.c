@@ -314,7 +314,7 @@ void print_transitions(struct function_array *fa) {
 struct dfa *nfa_to_dfa(af_s *afn) {
     struct dfa *d;
     unsigned char *alphabet;
-    struct transition_array *transitions;
+    struct function_array *transitions;
     struct uintv *destinations, *all_destinations;
     struct uintvv *states_array;
 
