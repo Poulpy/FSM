@@ -79,6 +79,7 @@ void concat_uintv(struct uintv *uint_vector, struct uintv *to_add) {
     old_len = uint_vector->len;
     new_len = old_len + to_add->len;
     uint_vector->v = (unsigned int *) realloc(uint_vector->v, sizeof(unsigned int) * new_len);
+    uint_vector->len++;
 
     for (size_t j = old_len, i = 0; j != new_len; j++, i++) {
         uint_vector->v[j] = to_add->v[i];
