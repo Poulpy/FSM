@@ -12,8 +12,7 @@ struct uintvv {
 struct uintvv *new_uintvv(size_t vvlen, size_t vlen);
 void free_uintvv(struct uintvv *uint_matrix);
 void print_uintvv(struct uintvv *uint_matrix);
-// TODO
-void append_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector);
 size_t get_index_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector);
+void append_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector);
 
 #endif

@@ -63,3 +63,15 @@ size_t get_index_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector) {
     return uint_matrix->len;
 }
 
+/**
+ * Appends a new element to uint_matrix, at the end of the array
+ */
+void append_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector) {
+    size_t len;
+
+    len = uint_matrix->len;
+    uint_matrix->vv = (struct uintv **) realloc(uint_matrix, sizeof(struct uintv *) * (len + 1));
+    uint_matrix->vv[len] = new_uintv(uint_vector->len);
+    copy_uintv(uint_matrix->vv[len], uint_vector);
+}
+
