@@ -60,9 +60,7 @@ void print_uintv(struct uintv *uint_vector) {
 void copy_uintv(struct uintv *to, struct uintv *from) {
     if (to->len != from->len) return;
 
-    for (size_t i = 0; i != from->len; i++) {
-        to->v[i] = from->v[i];
-    }
+    memcpy(to->v, from->v, sizeof(to->v));
 }
 
 /**
