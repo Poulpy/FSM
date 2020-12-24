@@ -39,13 +39,13 @@ struct ftransition find_transition_with_start_state_and_symbol(struct dfa *d, un
 void free_dfa(struct dfa *d);
 void print_dfa(struct dfa *d);
 
-struct ftransition new_ftransition(unsigned int start_state, unsigned char c, unsigned int dest_state);
 bool eql_ftransition(struct ftransition f1, struct ftransition f2);
+struct ftransition new_ftransition(unsigned int start_state, unsigned char c, unsigned int dest_state);
 struct ftransition null_transition();
 struct function_array *new_function_array(size_t len);
 void append_transition(struct function_array *fa, struct ftransition t);
-void print_transitions(struct function_array *fa);
 void free_function_array(struct function_array *fa);
+void print_transitions(struct function_array *fa);
 
 void deduce_states(struct uintvv *table, struct uintv *states);
 
