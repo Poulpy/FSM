@@ -11,20 +11,12 @@ struct uintv {
     size_t len;
 };
 
-// Vector of vectors unsigned int
-struct uintvv {
-    struct uintv **vv;
-    size_t len;
-};
-
 bool eql_uintv(struct uintv *uint_vector1, struct uintv *uint_vector2);
 struct uintv *new_uintv(size_t len);
 void copy_uintv(struct uintv *to, struct uintv *from);
 void free_uintv(struct uintv *uint_vector);
 void print_uintv(struct uintv *uint_vector);
-
-struct uintvv *new_uintvv(size_t vvlen, size_t vlen);
-void free_uintvv(struct uintvv *uint_matrix);
-void print_uintvv(struct uintvv *uint_matrix);
+// TODO
+void concat_uintv(struct uintv *uint_vector, struct uintv to_add);
 
 #endif

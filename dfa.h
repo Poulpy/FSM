@@ -8,6 +8,7 @@
 #include<string.h>
 
 #include "uintv.h"
+#include "uintvv.h"
 
 // deterministic finite automaton
 struct dfa {

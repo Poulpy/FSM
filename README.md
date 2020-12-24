@@ -10,3 +10,4 @@ How to compile part 2
 ```
 gcc uintv.c dfa.c test_dfa.c -std=c99 -g -O2
 ```
+gcc uintv.c uintvv.c dfa.c test_dfa.c -std=c99 -g -O2 

@@ -289,6 +289,64 @@ void print_transitions(struct function_array *fa) {
 }
 
 
+#if 1==2
+/**
+ * Convertit un automate fini non déterministe en un automate fini déterministe
+ *
+ */
+struct dfa *nfa_to_dfa(af_s *afn) {
+    struct dfa *d;
+    unsigned char *alphabet;
+    struct transition_array *transitions;
+    struct uintv *destinations, *all_destinations;
+    struct uintvv *states_array;
+
+    /* TODO remove this line
+     * there's no field for the alphabet in the struct af_s :/
+     * so there's no choice but to create it here, and add to the dfa later
+     */
+    alphabet = get_ascii_table();
+
+    for (size_t t = 0; t != states_array->len; t++) {
+        for (size_t s = 0; s != strlen(alphabet); s++) {
+            for (size_t i = 0; i != states_array->vv[t]->len; i++) {
+                /* TODO modify struct af_s
+                 * Would have been better if the transitions were a field
+                 * (start_state, symbol, array_of_destinations)
+                 * Better complexity for the method below
+                 * get_destinations_states_for()
+                 */
+                destinations = get_destinations_states_for(states_array->vv[t]->v[i], s);
+                concat_uintv(all_destinations, destinations);
+                free_uintv(destinations);
+            }
+
+            index = get_index_uintvv(states_array, all_destinations);
+
+            // meaning states_array contains all_destinations
+            if (index < states_array->len) {
+                append_transition(transitions, new_ftransition(t, s, index));
+            } else {
+                append_uintvv(states_array, all_destinations);
+                append_transition(transitions, new_ftransition(t, s, states_array->len - 1));
+            }
+        }
+    }
+
+    // TODO get final states
+
+    d = new_dfa(states_array->len);
+    dfa_minimized->alphabet = (unsigned char *) calloc(1, strlen(d->alphabet) + 1);
+    strcpy(dfa_minimized->alphabet, d->alphabet);
+
+    free_uintv(all_destinations);
+    free_uintvv(states_array);
+
+    return d;
+}
+#endif
+
+
 // utils
 unsigned char *get_ascii_table() {
     unsigned char *ascii_table;
