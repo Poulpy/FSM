@@ -14,5 +14,6 @@ struct uintvv *new_uintvv(size_t vvlen, size_t vlen);
 void append_uintvv(struct uintvv *uint_matrix, struct uintv *uint_vector);
 void free_uintvv(struct uintvv *uint_matrix);
 void print_uintvv(struct uintvv *uint_matrix);
+struct uintvv *new_uintvv_and_fill(size_t vvlen, size_t vlen, ...);
 
 #endif

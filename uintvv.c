@@ -21,6 +21,41 @@ struct uintvv *new_uintvv(size_t vvlen, size_t vlen) {
     return uint_matrix;
 }
 
+
+/**
+ * Initialize a 2D array of unsigned ints and fill it with the variable number
+ * of arguments
+ *
+ * Example: new_uintvv_and_fill(2, 2, 1, 0, 9, 3) gives [[1, 0], [9, 3]]
+ *
+ * Note: don't forget to free_uintvv
+ */
+struct uintvv *new_uintvv_and_fill(size_t vvlen, size_t vlen, ...) {
+    struct uintvv *uint_matrix;
+    struct uintv **uint_vector;
+    va_list ap;
+
+    uint_matrix = (struct uintvv *) malloc(sizeof(struct uintvv));
+    uint_matrix->vv = (struct uintv **) malloc(sizeof(struct uintv *) * vvlen);
+    uint_matrix->len = vvlen;
+
+    for (size_t i = 0; i != vvlen; i++) {
+        uint_matrix->vv[i] = new_uintv(vlen);
+    }
+
+    // filling the array with the values ...
+    va_start(ap, vlen);
+    for (size_t i = 0; i != vvlen; i++)  {
+        for (size_t j = 0; j != vlen; j++) {
+            uint_matrix->vv[i]->v[j] = va_arg(ap, unsigned int);
+        }
+    }
+    va_end(ap);
+
+
+    return uint_matrix;
+}
+
 /**
  * Initialize a 2D array of unsigned ints
  *
