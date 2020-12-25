@@ -6,18 +6,19 @@
 void test_accept() {
     struct dfa *d;
     struct ftransition t;
+    unsigned char *alphabet;
 
     t.start_state = 0;
     t.symbol = 'b';
     t.dest_state = 1;
 
-    d = new_dfa(2);
+    alphabet = get_ascii_table();
+    d = new_dfa(2, alphabet);
     d->final_states[1] = true;
-    d->alphabet = get_ascii_table();
-    d->func = new_function_array(1);
+    d->func = new_function_array(0);
 
     append_transition(d->func, t);
-    printf("len %d\n", d->func->len);
+    //printf("len %d\n", d->func->len);
     if (accept(d, "b")) {
         printf("OK\n");
     } else {
@@ -41,9 +42,9 @@ void test_accept() {
 
     struct dfa *d2;
 
-    d2 = new_dfa(2);
-    d2->alphabet = get_ascii_table();
-    d2->func = new_function_array(1);
+    d2 = new_dfa(2, alphabet);
+    //d2->alphabet = get_ascii_table();
+    d2->func = new_function_array(0);
     append_transition(d2->func, new_ftransition(0, 'c', 1));
     if (!accept(d, "c")) {
         printf("OK\n");
@@ -53,6 +54,7 @@ void test_accept() {
 
     free_dfa(d);
     free_dfa(d2);
+    free(alphabet);
 }
 
 void test_deduce_states() {
@@ -83,14 +85,15 @@ void test_deduce_states() {
 
 void test_dfa_minimization() {
     struct dfa *d, *minimized_dfa;
+    unsigned char *alphabet;
 
-    d = new_dfa(8);
+    alphabet = (unsigned char *) malloc(sizeof(unsigned char) * 3);
+    strcpy(alphabet, "ab");
+    d = new_dfa(8, alphabet);
     d->final_states[4] = true;
     d->final_states[5] = true;
     d->final_states[6] = true;
     d->final_states[7] = true;
-    d->alphabet = (unsigned char *) malloc(sizeof(unsigned char) * 3);
-    memcpy(d->alphabet, "ab", sizeof("ab"));
     d->func = new_function_array(16);
 
     d->func->transitions[0] = (struct ftransition) { 0, 'a', 1 };

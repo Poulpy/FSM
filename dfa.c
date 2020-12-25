@@ -5,11 +5,14 @@
  *
  * Note: don't forget to free
  */
-struct dfa *new_dfa(unsigned int states_count) {
+struct dfa *new_dfa(unsigned int states_count, unsigned char *alphabet) {
     struct dfa *d;
 
     d = (struct dfa *) malloc(sizeof(struct dfa));
     d->states_count = states_count;
+
+    d->alphabet = (unsigned char *) malloc(strlen(alphabet) + 1);
+    strcpy(d->alphabet, alphabet);
 
     d->final_states = (bool *) malloc(sizeof(bool) * states_count);
     set_all(d->final_states, states_count, false);
@@ -176,7 +179,7 @@ struct dfa *dfa_minimization(struct dfa *d) {
     // initial state is 0, so we add 1
     new_states_count = states->v[states_count - 1] + 1;
 
-    dfa_minimized = new_dfa(new_states_count);
+    dfa_minimized = new_dfa(new_states_count, d->alphabet);
     dfa_minimized->func = new_function_array(new_states_count * strlen(d->alphabet));
     done = (bool *) malloc(sizeof(bool) * new_states_count);
 
@@ -220,8 +223,8 @@ struct dfa *dfa_minimization(struct dfa *d) {
 
 
 
-    dfa_minimized->alphabet = (unsigned char *) calloc(1, strlen(d->alphabet) + 1);
-    strcpy(dfa_minimized->alphabet, d->alphabet);
+    //dfa_minimized->alphabet = (unsigned char *) calloc(1, strlen(d->alphabet) + 1);
+    //strcpy(dfa_minimized->alphabet, d->alphabet);
 
     free_uintv(states);
     free_uintv(states_before);
@@ -279,6 +282,8 @@ void deduce_states(struct uintvv *table, struct uintv *states) {
 
 void print_dfa(struct dfa *d) {
     printf("states_count : %d\n", d->states_count);
+
+    printf("alphabet : %s\n", d->alphabet);
 
     printf("final_states : ");
 
@@ -371,7 +376,7 @@ struct dfa *nfa_to_dfa(af_s *afn) {
         }
     }
 
-    d = new_dfa(states_array->len);
+    d = new_dfa(states_array->len, alphabet);
 
     // TODO get final states
     for (size_t z = 0; z != states_array->len; z++) {
@@ -386,8 +391,8 @@ struct dfa *nfa_to_dfa(af_s *afn) {
         }
     }
 
-    dfa_minimized->alphabet = (unsigned char *) calloc(1, strlen(d->alphabet) + 1);
-    strcpy(dfa_minimized->alphabet, d->alphabet);
+    //dfa_minimized->alphabet = (unsigned char *) calloc(1, strlen(d->alphabet) + 1);
+    //strcpy(dfa_minimized->alphabet, d->alphabet);
 
     free_uintv(all_destinations);
     free_uintvv(states_array);
