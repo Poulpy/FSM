@@ -103,7 +103,7 @@ struct ftransition find_transition_with_start_state_and_symbol(struct dfa *d,
 struct function_array *new_function_array(size_t len) {
     struct function_array *fa;
 
-    fa = (struct function_array *) calloc(sizeof(struct function_array), 1);
+    fa = (struct function_array *) malloc(sizeof(struct function_array));
 
     fa->transitions = (struct ftransition*) calloc(sizeof(struct ftransition), len);
     fa->len = len;
