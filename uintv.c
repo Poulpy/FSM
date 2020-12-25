@@ -47,6 +47,8 @@ struct uintv *new_uintv_and_fill(size_t len, ...) {
  */
 bool eql_uintv(struct uintv *uint_vector1, struct uintv *uint_vector2) {
     if (uint_vector1->len != uint_vector2->len) return false;
+    // TODO weird
+    if (uint_vector1->len == 0 && uint_vector2->len == 0) return true;
 
     return (memcmp(uint_vector1->v, uint_vector2->v, sizeof(uint_vector1->len)) == 0);
 }
@@ -110,4 +112,15 @@ void append_uintv(struct uintv *uint_vector, unsigned int to_append) {
     uint_vector->len++;
     uint_vector->v[new_len - 1] = to_append;
 }
+
+/**
+ * clear_uintv
+ *
+ * Remove all elements of a vector
+ */
+void clear_uintv(struct uintv *uint_vector) {
+    uint_vector->v = (unsigned int *) realloc(uint_vector->v, sizeof(unsigned int) * 0);
+    uint_vector->len = 0;
+}
+
 

@@ -123,6 +123,23 @@ void test_append_uintv() {
     free_uintv(vector);
 }
 
+void test_clear_uintv() {
+    struct uintv *vector, *empty_vector;
+
+    vector = new_uintv_and_fill(2, 2, 2);
+
+    empty_vector = new_uintv(0);
+    clear_uintv(vector);
+    if (eql_uintv(vector, empty_vector)) {
+        puts("OK");
+    } else {
+        puts("KO");
+    }
+
+    free_uintv(vector);
+    free_uintv(empty_vector);
+}
+
 int main()
 {
     test_new_uintv();
@@ -131,6 +148,7 @@ int main()
     test_eql_uintv();
     test_new_uintv_and_fill();
     test_append_uintv();
+    test_clear_uintv();
 
     return 0;
 }
