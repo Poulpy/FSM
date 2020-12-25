@@ -313,6 +313,7 @@ void print_transitions(struct function_array *fa) {
 
 #if 1==2
 
+
 /**
  * Return the destinations for a given state and a given symbol
  * Note: don't forget to free_uintv
@@ -322,9 +323,9 @@ struct uintv *get_destinations_states_for(af_s *afn, unsigned int start_state, u
 
     destinations = new_uintv(0);
 
-    for (size_t i = 0; i != afn->tr[start_state]->size; i++) {
-        if (afn->tr[start_state]->symbols[i] == symbol) {
-            append_uintv(afn->tr[start_state]->destinations[i]);
+    for (size_t i = 0; i != afn->tr[start_state].size; i++) {
+        if (afn->tr[start_state].symbols[i] == symbol) {
+            append_uintv(destinations, afn->tr[start_state].destinations[i]);
         }
     }
 
@@ -342,6 +343,7 @@ struct dfa *nfa_to_dfa(af_s *afn) {
     struct uintv *destinations, *all_destinations;
     struct uintvv *states_array;
     bool *new_final_states;
+    size_t index;
 
     /* TODO remove this line
      * there's no field for the alphabet in the struct af_s :/
@@ -349,8 +351,11 @@ struct dfa *nfa_to_dfa(af_s *afn) {
      */
     alphabet = get_ascii_table();
 
+    transitions = new_function_array(0);
+
     for (size_t t = 0; t != states_array->len; t++) {
         for (size_t s = 0; s != strlen(alphabet); s++) {
+            all_destinations = new_uintv(0);
             for (size_t i = 0; i != states_array->vv[t]->len; i++) {
                 /* TODO modify struct af_s
                  * Would have been better if the transitions were a field
@@ -358,7 +363,7 @@ struct dfa *nfa_to_dfa(af_s *afn) {
                  * Better complexity for the method below
                  * get_destinations_states_for()
                  */
-                destinations = get_destinations_states_for(states_array->vv[t]->v[i], s);
+                destinations = get_destinations_states_for(afn, states_array->vv[t]->v[i], s);
                 concat_uintv(all_destinations, destinations);
                 free_uintv(destinations);
             }
@@ -372,13 +377,12 @@ struct dfa *nfa_to_dfa(af_s *afn) {
                 append_uintvv(states_array, all_destinations);
                 append_transition(transitions, new_ftransition(t, s, states_array->len - 1));
             }
-            clear_uintv(all_destinations);
+            free_uintv(all_destinations);
         }
     }
 
-    d = new_dfa(states_array->len, alphabet);
+    d = new_dfa(states_array->len);
 
-    // TODO get final states
     for (size_t z = 0; z != states_array->len; z++) {
         size_t y = 0;
         while (y != states_array->vv[z]->len && !d->final_states) {
@@ -391,8 +395,8 @@ struct dfa *nfa_to_dfa(af_s *afn) {
         }
     }
 
-    //dfa_minimized->alphabet = (unsigned char *) calloc(1, strlen(d->alphabet) + 1);
-    //strcpy(dfa_minimized->alphabet, d->alphabet);
+    d->alphabet = (unsigned char *) calloc(1, strlen(d->alphabet) + 1);
+    strcpy(d->alphabet, d->alphabet);
 
     free_uintv(all_destinations);
     free_uintvv(states_array);
