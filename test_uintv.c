@@ -1,6 +1,14 @@
 #include<stdio.h>
 #include "uintv.h"
 
+void test_new_uintv() {
+    struct uintv *v1;
+
+    v1 = new_uintv(0);
+
+    free_uintv(v1);
+}
+
 void test_concat_uintv() {
     struct uintv *v1, *v2;
 
@@ -44,11 +52,13 @@ void test_copy_uintv() {
 }
 
 void test_eql_uintv() {
-    struct uintv *v1, *v2, *v3;
+    struct uintv *v1, *v2, *v3, *v4, *v5;
 
     v1 = new_uintv(2);
     v2 = new_uintv(2);
     v3 = new_uintv(3);
+    v4 = new_uintv(0);
+    v5 = new_uintv(0);
     v1->v[0] = 1;
     v1->v[1] = 1;
     v2->v[0] = 0;
@@ -73,9 +83,17 @@ void test_eql_uintv() {
         puts("KO");
     }
 
+    if (eql_uintv(v4, v5)) {
+        puts("OK");
+    } else {
+        puts("KO");
+    }
+
     free_uintv(v1);
     free_uintv(v2);
     free_uintv(v3);
+    free_uintv(v4);
+    free_uintv(v5);
 }
 
 void test_new_uintv_and_fill() {
@@ -107,6 +125,7 @@ void test_append_uintv() {
 
 int main()
 {
+    test_new_uintv();
     test_concat_uintv();
     test_copy_uintv();
     test_eql_uintv();

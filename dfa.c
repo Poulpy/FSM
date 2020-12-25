@@ -315,7 +315,7 @@ void print_transitions(struct function_array *fa) {
 struct uintv *get_destinations_states_for(af_s *afn, unsigned int start_state, unsigned char symbol) {
     struct uintv *destinations;
 
-    destinations = new_uintv(1);
+    destinations = new_uintv(0);
 
     for (size_t i = 0; i != afn->tr[start_state]->size; i++) {
         if (afn->tr[start_state]->symbols[i] == symbol) {
