@@ -87,14 +87,31 @@ void test_new_uintv_and_fill() {
     } else {
         puts("KO");
     }
+
+    free_uintv(v1);
+}
+
+void test_append_uintv() {
+    struct uintv *vector;
+
+    vector = new_uintv_and_fill(4, 1, 1, 2, 3);
+    append_uintv(vector, 2);
+    if (vector->len == 5 && vector->v[4] == 2) {
+        puts("OK");
+    } else {
+        puts("KO");
+    }
+
+    free_uintv(vector);
 }
 
 int main()
 {
-    test_concat();
+    test_concat_uintv();
     test_copy_uintv();
     test_eql_uintv();
     test_new_uintv_and_fill();
+    test_append_uintv();
 
     return 0;
 }

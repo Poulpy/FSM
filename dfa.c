@@ -307,6 +307,25 @@ void print_transitions(struct function_array *fa) {
 
 
 #if 1==2
+
+/**
+ * Return the destinations for a given state and a given symbol
+ * Note: don't forget to free_uintv
+ */
+struct uintv *get_destinations_states_for(af_s *afn, unsigned int start_state, unsigned char symbol) {
+    struct uintv *destinations;
+
+    destinations = new_uintv(1);
+
+    for (size_t i = 0; i != afn->tr[start_state]->size; i++) {
+        if (afn->tr[start_state]->symbols[i] == symbol) {
+            append_uintv(afn->tr[start_state]->destinations[i]);
+        }
+    }
+
+    return destinations;
+}
+
 /**
  * Convertit un automate fini non déterministe en un automate fini déterministe
  *
@@ -317,6 +336,7 @@ struct dfa *nfa_to_dfa(af_s *afn) {
     struct function_array *transitions;
     struct uintv *destinations, *all_destinations;
     struct uintvv *states_array;
+    bool *new_final_states;
 
     /* TODO remove this line
      * there's no field for the alphabet in the struct af_s :/
@@ -350,9 +370,21 @@ struct dfa *nfa_to_dfa(af_s *afn) {
         }
     }
 
-    // TODO get final states
-
     d = new_dfa(states_array->len);
+
+    // TODO get final states
+    for (size_t z = 0; z != states_array->len; z++) {
+        size_t y = 0;
+        while (y != states_array->vv[z]->len && !d->final_states) {
+            int index = (int) states_array->vv[z]->v[y];
+
+            if (afn->final_states[index]) {
+                d->final_states[z] = true;
+            }
+            y++;
+        }
+    }
+
     dfa_minimized->alphabet = (unsigned char *) calloc(1, strlen(d->alphabet) + 1);
     strcpy(dfa_minimized->alphabet, d->alphabet);
 

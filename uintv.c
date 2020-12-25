@@ -97,5 +97,17 @@ void concat_uintv(struct uintv *uint_vector, struct uintv *to_add) {
     memcpy(&uint_vector->v[old_len], to_add->v, sizeof(to_add->v));
 }
 
+/**
+ * append_uintv
+ *
+ * Append a new element at the end of the vector
+ */
+void append_uintv(struct uintv *uint_vector, unsigned int to_append) {
+    size_t new_len;
 
+    new_len = uint_vector->len + 1;
+    uint_vector->v = (unsigned int *) realloc(uint_vector->v, sizeof(unsigned int) * new_len);
+    uint_vector->len++;
+    uint_vector->v[new_len - 1] = to_append;
+}
 
