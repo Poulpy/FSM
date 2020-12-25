@@ -19,12 +19,14 @@ struct dfa {
 };
 
 // array of transitions
+// TODO rename, name's meh
 struct function_array {
     struct ftransition *transitions;
     size_t len;
 };
 
 // transitions for dfa
+// TODO rename, name's meh
 struct ftransition {
     unsigned int start_state;
     unsigned char symbol;

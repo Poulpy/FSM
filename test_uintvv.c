@@ -2,6 +2,9 @@
 
 #include "uintvv.h"
 
+void test_new_unitvv() {
+}
+
 void test_new_uintvv_and_fill() {
     struct uintvv *m;
 
@@ -50,13 +53,20 @@ void test_get_index_uintvv() {
 }
 
 void test_append_uintvv() {
-    struct uintvv *m;
+    struct uintvv *m, *empty_matrix;
     struct uintv *v;
 
     m = new_uintvv_and_fill(2, 2, 3, 4, 5, 6);
     v = new_uintv_and_fill(5, 3, 4, 1, 1, 1);
     append_uintvv(m, v);
+    empty_matrix = new_uintvv(0, 0);
+    append_uintvv(empty_matrix, v);
 
+    if (empty_matrix->len == 1 && eql_uintv(empty_matrix->vv[0], v)) {
+        puts("OK");
+    } else {
+        puts("KO");
+    }
 
     if (m->len == 3 && eql_uintv(m->vv[2], v)) {
         puts("OK");
@@ -66,6 +76,7 @@ void test_append_uintvv() {
 
     free_uintv(v);
     free_uintvv(m);
+    free_uintvv(empty_matrix);
 }
 
 int main() {

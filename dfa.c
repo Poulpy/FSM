@@ -327,8 +327,8 @@ struct uintv *get_destinations_states_for(af_s *afn, unsigned int start_state, u
 }
 
 /**
- * Convertit un automate fini non déterministe en un automate fini déterministe
- *
+ * Convert nfa to dfa
+ * Note: don't forget to free_dfa
  */
 struct dfa *nfa_to_dfa(af_s *afn) {
     struct dfa *d;
@@ -367,6 +367,7 @@ struct dfa *nfa_to_dfa(af_s *afn) {
                 append_uintvv(states_array, all_destinations);
                 append_transition(transitions, new_ftransition(t, s, states_array->len - 1));
             }
+            clear_uintv(all_destinations);
         }
     }
 
