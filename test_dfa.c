@@ -10,9 +10,9 @@ void test_accept() {
     alphabet = get_ascii_table();
     d = new_dfa(2, alphabet);
     d->final_states[1] = true;
-    d->func = new_function_array(0);
+    d->func = new_transitionv(0);
 
-    append_transition(d->func, new_ftransition(0, 'b', 1));
+    append_transitionv(d->func, new_transition(0, 'b', 1));
     if (accept(d, "b")) {
         printf("OK\n");
     } else {
@@ -38,8 +38,8 @@ void test_accept() {
 
     d2 = new_dfa(2, alphabet);
     //d2->alphabet = get_ascii_table();
-    d2->func = new_function_array(0);
-    append_transition(d2->func, new_ftransition(0, 'c', 1));
+    d2->func = new_transitionv(0);
+    append_transitionv(d2->func, new_transition(0, 'c', 1));
     if (!accept(d, "c")) {
         printf("OK\n");
     } else {
@@ -88,24 +88,24 @@ void test_dfa_minimization() {
     d->final_states[5] = true;
     d->final_states[6] = true;
     d->final_states[7] = true;
-    d->func = new_function_array(16);
+    d->func = new_transitionv(16);
 
-    d->func->transitions[0] = new_ftransition(0, 'a', 1);
-    d->func->transitions[1] = new_ftransition(0, 'b', 0);
-    d->func->transitions[2] = new_ftransition(1, 'a', 2);
-    d->func->transitions[3] = new_ftransition(1, 'b', 3);
-    d->func->transitions[4] = new_ftransition(2, 'a', 5);
-    d->func->transitions[5] = new_ftransition(2, 'b', 3);
-    d->func->transitions[6] = new_ftransition(3, 'a', 4);
-    d->func->transitions[7] = new_ftransition(3, 'b', 0);
-    d->func->transitions[8] = new_ftransition(4, 'a', 5);
-    d->func->transitions[9] = new_ftransition(4, 'b', 6);
-    d->func->transitions[10] = new_ftransition(5, 'a', 5);
-    d->func->transitions[11] = new_ftransition(5, 'b', 6);
-    d->func->transitions[12] = new_ftransition(6, 'a', 4);
-    d->func->transitions[13] = new_ftransition(6, 'b', 7);
-    d->func->transitions[14] = new_ftransition(7, 'a', 4);
-    d->func->transitions[15] = new_ftransition(7, 'b', 7);
+    d->func->v[0] = new_transition(0, 'a', 1);
+    d->func->v[1] = new_transition(0, 'b', 0);
+    d->func->v[2] = new_transition(1, 'a', 2);
+    d->func->v[3] = new_transition(1, 'b', 3);
+    d->func->v[4] = new_transition(2, 'a', 5);
+    d->func->v[5] = new_transition(2, 'b', 3);
+    d->func->v[6] = new_transition(3, 'a', 4);
+    d->func->v[7] = new_transition(3, 'b', 0);
+    d->func->v[8] = new_transition(4, 'a', 5);
+    d->func->v[9] = new_transition(4, 'b', 6);
+    d->func->v[10] = new_transition(5, 'a', 5);
+    d->func->v[11] = new_transition(5, 'b', 6);
+    d->func->v[12] = new_transition(6, 'a', 4);
+    d->func->v[13] = new_transition(6, 'b', 7);
+    d->func->v[14] = new_transition(7, 'a', 4);
+    d->func->v[15] = new_transition(7, 'b', 7);
     print_dfa(d);
     minimized_dfa = dfa_minimization(d);
     print_dfa(minimized_dfa);
