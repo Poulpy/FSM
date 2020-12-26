@@ -337,6 +337,39 @@ struct dfa *nfa_to_dfa(af_s *afn) {
 
     return d;
 }
+
+/**
+ * Get the alphabet from the transitions, because there's no field
+ * for the alphabet in the struct af_s
+ */
+unsigned char *get_alphabet_from_transitions(af_s *afn) {
+    unsigned char *alphabet;
+    size_t f;
+
+    alphabet = (unsigned char *) malloc(sizeof(unsigned char) * 256);
+    strcpy(alphabet, "");
+    bool append;
+    for (size_t i = 0; i != afn->af_size; i++) {
+        for (size_t j = 0; j != afn->tr[i].size; j++) {
+
+            append = true;
+            f = 0;
+            while (f != strlen(alphabet) && append) {
+                if (afn->tr[i].symbols[j] == alphabet[f]) {
+                    append = false
+                }
+                f++;
+            }
+            if (append) {
+                alphabet[f] = afn->tr[i].symbols[j];
+                alphabet[f + 1] = '\0';
+            }
+        }
+    }
+
+    alphabet = (unsigned char *) realloc(alphabet, sizeof(unsigned char) * (strlen(alphabet) + 1));
+    return alphabet;
+}
 #endif
 
 /**
