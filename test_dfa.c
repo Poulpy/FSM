@@ -7,43 +7,48 @@ void test_accept() {
     struct dfa *d;
     unsigned char *alphabet;
 
-    alphabet = get_ascii_table();
+    alphabet = (unsigned char *) malloc(sizeof(unsigned char) * 2);
+
+    strcpy(alphabet, "b");
     d = new_dfa(2, alphabet);
     d->final_states[1] = true;
     d->func = new_transitionv(0);
 
     append_transitionv(d->func, new_transition(0, 'b', 1));
     if (accept(d, "b")) {
-        printf("OK\n");
+        puts("OK");
     } else {
-        printf("KO\n");
+        puts("KO");
     }
     if (accept(d, "ba") == false) {
-        printf("OK\n");
+        puts("OK");
     } else {
-        printf("KO\n");
+        puts("KO");
     }
     if (accept(d, "ab") == false) {
-        printf("OK\n");
+        puts("OK");
     } else {
-        printf("KO\n");
+        puts("KO");
     }
     if (accept(d, "c") == false) {
-        printf("OK\n");
+        puts("OK");
     } else {
-        printf("KO\n");
+        puts("KO");
     }
 
     struct dfa *d2;
+    unsigned char *alphabet2;
 
-    d2 = new_dfa(2, alphabet);
-    //d2->alphabet = get_ascii_table();
+    alphabet2 = (unsigned char *) malloc(sizeof(unsigned char) * 2);
+    strcpy(alphabet2, "c");
+
+    d2 = new_dfa(2, alphabet2);
     d2->func = new_transitionv(0);
     append_transitionv(d2->func, new_transition(0, 'c', 1));
     if (!accept(d, "c")) {
-        printf("OK\n");
+        puts("OK");
     } else {
-        printf("KO\n");
+        puts("KO");
     }
 
     free_dfa(d);
@@ -68,9 +73,9 @@ void test_deduce_states() {
 
     deduce_states(uia, states);
     if (states->v[0] == 0 && states->v[1] == 1 && states->v[2] == 1) {
-        printf("OK\n");
+        puts("OK");
     } else {
-        printf("KO\n");
+        puts("KO");
     }
 
     free_uintvv(uia);
@@ -106,9 +111,9 @@ void test_dfa_minimization() {
     d->func->v[13] = new_transition(6, 'b', 7);
     d->func->v[14] = new_transition(7, 'a', 4);
     d->func->v[15] = new_transition(7, 'b', 7);
-    print_dfa(d);
+    //print_dfa(d);
     minimized_dfa = dfa_minimization(d);
-    print_dfa(minimized_dfa);
+    //print_dfa(minimized_dfa);
     free_dfa(d);
     free(minimized_dfa);
 }

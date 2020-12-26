@@ -339,19 +339,6 @@ struct dfa *nfa_to_dfa(af_s *afn) {
 }
 #endif
 
-
-// TODO put in utils, totally unrelated here
-unsigned char *get_ascii_table() {
-    unsigned char *ascii_table;
-
-    ascii_table = (unsigned char *) calloc(257, sizeof(unsigned char));
-    for (size_t i = 0; i != 256; i++) {
-        ascii_table[i] = i;
-    }
-
-    return ascii_table;
-}
-
 /**
  * Set all values of an array of boolean
  *
