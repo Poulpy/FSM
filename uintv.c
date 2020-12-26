@@ -65,10 +65,16 @@ void free_uintv(struct uintv *uint_vector) {
  * Prints in the console the values of the array
  */
 void print_uintv(struct uintv *uint_vector) {
-    for (size_t i = 0; i != uint_vector->len; i++) {
-        printf("%d ", uint_vector->v[i]);
+    printf("[");
+    if (uint_vector->len == 0) {
+        printf("]\n");
+        return;
     }
-    puts("");
+
+    for (size_t i = 0; i != uint_vector->len - 1; i++) {
+        printf("%d, ", uint_vector->v[i]);
+    }
+    printf("%d]\n", uint_vector->v[uint_vector->len - 1]);
 }
 
 /**
