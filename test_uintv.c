@@ -10,7 +10,7 @@ void test_new_uintv() {
 }
 
 void test_concat_uintv() {
-    struct uintv *v1, *v2;
+    struct uintv *v1, *v2, *v3;
 
     v1 = new_uintv(1);
     v2 = new_uintv(1);
@@ -25,8 +25,18 @@ void test_concat_uintv() {
         puts("KO");
     }
 
+    v3 = new_uintv(0);
+    concat_uintv(v3, v1);
+
+    if (eql_uintv(v3, v1)) {
+        puts("OK");
+    } else {
+        puts("KO");
+    }
+
     free_uintv(v1);
     free_uintv(v2);
+    free_uintv(v3);
 }
 
 void test_copy_uintv() {

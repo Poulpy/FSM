@@ -91,6 +91,8 @@ void copy_uintv(struct uintv *to, struct uintv *from) {
 void concat_uintv(struct uintv *uint_vector, struct uintv *to_add) {
     size_t new_len, old_len;
 
+    if (uint_vector->len == 0 && to_add->len == 0) return;
+
     old_len = uint_vector->len;
     new_len = old_len + to_add->len;
     uint_vector->v = (unsigned int *) realloc(uint_vector->v, sizeof(unsigned int) * new_len);
