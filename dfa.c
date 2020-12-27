@@ -300,7 +300,7 @@ struct dfa *nfa_to_dfa(af_s *afn) {
         for (size_t s = 0; s != strlen(alphabet); s++) {
             all_destinations = new_uintv(0);
             for (size_t i = 0; i != states_array->vv[t]->len; i++) {
-                destinations = get_destinations_states_for(afn, states_array->vv[t]->v[i], s);
+                destinations = get_destinations_states_for(afn, states_array->vv[t]->v[i], alphabet[s]);
                 concat_uintv(all_destinations, destinations);
                 free_uintv(destinations);
             }
@@ -312,7 +312,7 @@ struct dfa *nfa_to_dfa(af_s *afn) {
                 append_transitionv(transitions, new_transition(t, s, index));
             } else {
                 append_uintvv(states_array, all_destinations);
-                append_transitionv(transitions, new_transition(t, s, states_array->len - 1));
+                append_transitionv(transitions, new_transition(t, alphabet[s], states_array->len - 1));
             }
             free_uintv(all_destinations);
         }

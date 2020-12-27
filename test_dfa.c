@@ -113,7 +113,7 @@ void test_dfa_minimization() {
     d->func->v[15] = new_transition(7, 'b', 7);
     //print_dfa(d);
     minimized_dfa = dfa_minimization(d);
-    //print_dfa(minimized_dfa);
+    print_dfa(minimized_dfa);
     free_dfa(d);
     free(minimized_dfa);
 }
