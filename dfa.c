@@ -257,6 +257,7 @@ void print_dfa(struct dfa *d) {
 #if 1==2
 
 
+
 /**
  * Return the destinations for a given state and a given symbol
  * Note: don't forget to free_uintv
@@ -267,13 +268,52 @@ struct uintv *get_destinations_states_for(af_s *afn, unsigned int start_state, u
     destinations = new_uintv(0);
 
     for (size_t i = 0; i != afn->tr[start_state].size; i++) {
-        if (afn->tr[start_state].symbols[i] == symbol) {
+        if (afn->tr[start_state].symbols[i] == (char) symbol) {
             append_uintv(destinations, afn->tr[start_state].destinations[i]);
         }
     }
 
     return destinations;
 }
+
+/**
+ * Get the alphabet from the transitions, because there's no field
+ * for the alphabet in the struct af_s
+ * TODO remove this
+ */
+unsigned char *get_alphabet_from_transitions(af_s *afn) {
+    unsigned char *alphabet;
+    size_t f;
+
+    alphabet = (unsigned char *) malloc(sizeof(unsigned char) * 256);
+    strcpy(alphabet, "");
+    bool append;
+
+    // we loop through all transitions
+    for (size_t i = 0; i != afn->af_size; i++) {
+        for (size_t j = 0; j != afn->tr[i].size; j++) {
+
+            append = true;
+            f = 0;
+            // we search in the alphabet if the symbol isn't already here
+            while (f != strlen(alphabet) && append) {
+                if (afn->tr[i].symbols[j] == alphabet[f]) {
+                    append = false;
+                }
+                f++;
+            }
+            // the isn't in the alphabet, we add it
+            if (append) {
+                alphabet[f] = afn->tr[i].symbols[j];
+                alphabet[f + 1] = '\0';
+            }
+        }
+    }
+
+    alphabet = (unsigned char *) realloc(alphabet, sizeof(unsigned char) * (strlen(alphabet) + 1));
+    return alphabet;
+}
+
 
 /**
  * Convert nfa to dfa
@@ -292,24 +332,27 @@ struct dfa *nfa_to_dfa(af_s *afn) {
      * there's no field for the alphabet in the struct af_s :/
      * so there's no choice but to create it here, and add to the dfa later
      */
-    alphabet = get_ascii_table();
+    alphabet = get_alphabet_from_transitions(afn);
 
     transitions = new_transitionv(0);
+    // we begin with the state 0
+    states_array = new_uintvv_and_fill(1, 1, 0);
 
     for (size_t t = 0; t != states_array->len; t++) {
+        // for each symbol of the alphabet, we take all the destinations states
         for (size_t s = 0; s != strlen(alphabet); s++) {
             all_destinations = new_uintv(0);
             for (size_t i = 0; i != states_array->vv[t]->len; i++) {
                 destinations = get_destinations_states_for(afn, states_array->vv[t]->v[i], alphabet[s]);
+
                 concat_uintv(all_destinations, destinations);
                 free_uintv(destinations);
             }
-
             index = get_index_uintvv(states_array, all_destinations);
 
             // meaning states_array contains all_destinations
             if (index < states_array->len) {
-                append_transitionv(transitions, new_transition(t, s, index));
+                append_transitionv(transitions, new_transition(t, alphabet[s], index));
             } else {
                 append_uintvv(states_array, all_destinations);
                 append_transitionv(transitions, new_transition(t, alphabet[s], states_array->len - 1));
@@ -319,56 +362,24 @@ struct dfa *nfa_to_dfa(af_s *afn) {
     }
 
     d = new_dfa(states_array->len, alphabet);
+    d->func = transitions;
 
+    // set the final states
     for (size_t z = 0; z != states_array->len; z++) {
         size_t y = 0;
-        while (y != states_array->vv[z]->len && !d->final_states) {
+        while (y != states_array->vv[z]->len && !d->final_states[z]) {
             int index = (int) states_array->vv[z]->v[y];
 
-            if (afn->final_states[index]) {
+            if (afn->final_states[index] == FINAL) {
                 d->final_states[z] = true;
             }
             y++;
         }
     }
 
-    free_uintv(all_destinations);
     free_uintvv(states_array);
 
     return d;
-}
-
-/**
- * Get the alphabet from the transitions, because there's no field
- * for the alphabet in the struct af_s
- */
-unsigned char *get_alphabet_from_transitions(af_s *afn) {
-    unsigned char *alphabet;
-    size_t f;
-
-    alphabet = (unsigned char *) malloc(sizeof(unsigned char) * 256);
-    strcpy(alphabet, "");
-    bool append;
-    for (size_t i = 0; i != afn->af_size; i++) {
-        for (size_t j = 0; j != afn->tr[i].size; j++) {
-
-            append = true;
-            f = 0;
-            while (f != strlen(alphabet) && append) {
-                if (afn->tr[i].symbols[j] == alphabet[f]) {
-                    append = false
-                }
-                f++;
-            }
-            if (append) {
-                alphabet[f] = afn->tr[i].symbols[j];
-                alphabet[f + 1] = '\0';
-            }
-        }
-    }
-
-    alphabet = (unsigned char *) realloc(alphabet, sizeof(unsigned char) * (strlen(alphabet) + 1));
-    return alphabet;
 }
 #endif
 
