@@ -1,4 +1,6 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <assert.h>
+
 #include "uintv.h"
 
 void test_new_uintv() {
@@ -19,20 +21,12 @@ void test_concat_uintv() {
 
     concat_uintv(v1, v2);
 
-    if (v1->len == 2 && v1->v[1] == 4 && v1->v[0] == 1) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(v1->len == 2 && v1->v[1] == 4 && v1->v[0] == 1);
 
     v3 = new_uintv(0);
     concat_uintv(v3, v1);
 
-    if (eql_uintv(v3, v1)) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(eql_uintv(v3, v1));
 
     free_uintv(v1);
     free_uintv(v2);
@@ -51,11 +45,7 @@ void test_copy_uintv() {
 
     copy_uintv(v1, v2);
 
-    if (v1->v[0] == 0 && v1->v[1] == 4) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(v1->v[0] == 0 && v1->v[1] == 4);
 
     free_uintv(v1);
     free_uintv(v2);
@@ -74,30 +64,14 @@ void test_eql_uintv() {
     v2->v[0] = 0;
     v2->v[1] = 4;
 
-    if (!eql_uintv(v1, v2)) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(!eql_uintv(v1, v2));
 
     copy_uintv(v2, v1);
-    if (eql_uintv(v1, v2)) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(eql_uintv(v1, v2));
 
-    if (!eql_uintv(v3, v1)) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(!eql_uintv(v3, v1));
 
-    if (eql_uintv(v4, v5)) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(eql_uintv(v4, v5));
 
     free_uintv(v1);
     free_uintv(v2);
@@ -110,11 +84,7 @@ void test_new_uintv_and_fill() {
     struct uintv *v1;
 
     v1 = new_uintv_and_fill(3, 2, 3, 4);
-    if (v1->v[0] == 2 && v1->v[1] == 3 && v1->v[2] == 4) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(v1->v[0] == 2 && v1->v[1] == 3 && v1->v[2] == 4);
 
     free_uintv(v1);
 }
@@ -124,11 +94,7 @@ void test_append_uintv() {
 
     vector = new_uintv_and_fill(4, 1, 1, 2, 3);
     append_uintv(vector, 2);
-    if (vector->len == 5 && vector->v[4] == 2) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(vector->len == 5 && vector->v[4] == 2);
 
     free_uintv(vector);
 }
@@ -140,11 +106,7 @@ void test_clear_uintv() {
 
     empty_vector = new_uintv(0);
     clear_uintv(vector);
-    if (eql_uintv(vector, empty_vector)) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(eql_uintv(vector, empty_vector));
 
     free_uintv(vector);
     free_uintv(empty_vector);

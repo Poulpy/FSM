@@ -1,4 +1,5 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <assert.h>
 
 #include "uintvv.h"
 
@@ -10,13 +11,8 @@ void test_new_uintvv_and_fill() {
 
     m = new_uintvv_and_fill(2, 2, 1, 9, 3, 4);
 
-    if (m->vv[0]->v[0] == 1 && m->vv[0]->v[1] == 9 && m->vv[1]->v[0] == 3
-        && m->vv[1]->v[1] == 4) {
-
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(m->vv[0]->v[0] == 1 && m->vv[0]->v[1] == 9 && m->vv[1]->v[0] == 3
+        && m->vv[1]->v[1] == 4);
 
     free_uintvv(m);
 }
@@ -30,21 +26,9 @@ void test_get_index_uintvv() {
     v2 = new_uintv_and_fill(2, 3, 4);
     v3 = new_uintv_and_fill(2, 9, 3);
 
-    if (get_index_uintvv(m, v1) == 0) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
-    if (get_index_uintvv(m, v2) == 1) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
-    if (get_index_uintvv(m, v3) == m->len) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(get_index_uintvv(m, v1) == 0);
+    assert(get_index_uintvv(m, v2) == 1);
+    assert(get_index_uintvv(m, v3) == m->len);
 
     free_uintvv(m);
     free_uintv(v1);
@@ -62,17 +46,9 @@ void test_append_uintvv() {
     empty_matrix = new_uintvv(0, 0);
     append_uintvv(empty_matrix, v);
 
-    if (empty_matrix->len == 1 && eql_uintv(empty_matrix->vv[0], v)) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(empty_matrix->len == 1 && eql_uintv(empty_matrix->vv[0], v));
 
-    if (m->len == 3 && eql_uintv(m->vv[2], v)) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(m->len == 3 && eql_uintv(m->vv[2], v));
 
     free_uintv(v);
     free_uintvv(m);

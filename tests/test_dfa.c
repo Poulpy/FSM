@@ -1,5 +1,7 @@
-#include<stdio.h>
-#include<stdbool.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <assert.h>
+
 #include "dfa.h"
 #include "uintv.h"
 
@@ -15,26 +17,10 @@ void test_accept() {
     d->func = new_transitionv(0);
 
     append_transitionv(d->func, new_transition(0, 'b', 1));
-    if (accept(d, "b")) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
-    if (accept(d, "ba") == false) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
-    if (accept(d, "ab") == false) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
-    if (accept(d, "c") == false) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(accept(d, "b"));
+    assert(accept(d, "ba") == false);
+    assert(accept(d, "ab") == false);
+    assert(accept(d, "c") == false);
 
     struct dfa *d2;
     unsigned char *alphabet2;
@@ -45,11 +31,7 @@ void test_accept() {
     d2 = new_dfa(2, alphabet2);
     d2->func = new_transitionv(0);
     append_transitionv(d2->func, new_transition(0, 'c', 1));
-    if (!accept(d, "c")) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(!accept(d, "c"));
 
     free_dfa(d);
     free_dfa(d2);
@@ -72,11 +54,7 @@ void test_deduce_states() {
     }
 
     deduce_states(uia, states);
-    if (states->v[0] == 0 && states->v[1] == 1 && states->v[2] == 1) {
-        puts("OK");
-    } else {
-        puts("KO");
-    }
+    assert(states->v[0] == 0 && states->v[1] == 1 && states->v[2] == 1);
 
     free_uintvv(uia);
     free_uintv(states);
