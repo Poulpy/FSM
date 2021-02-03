@@ -3,7 +3,7 @@
 
 #include "uintvv.h"
 
-void test_new_unitvv() {
+void test_new_uintvv() {
 }
 
 void test_new_uintvv_and_fill() {
