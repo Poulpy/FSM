@@ -11,13 +11,20 @@ void test_new_uintv() {
     free_uintv(v1);
 }
 
+void test_new_uintv_and_fill() {
+    struct uintv *v1;
+
+    v1 = new_uintv_and_fill(3, 2, 3, 4);
+    assert(v1->v[0] == 2 && v1->v[1] == 3 && v1->v[2] == 4);
+
+    free_uintv(v1);
+}
+
 void test_concat_uintv() {
     struct uintv *v1, *v2, *v3;
 
-    v1 = new_uintv(1);
-    v2 = new_uintv(1);
-    v1->v[0] = 1;
-    v2->v[0] = 4;
+    v1 = new_uintv_and_fill(1, 1);
+    v2 = new_uintv_and_fill(1, 4);
 
     concat_uintv(v1, v2);
 
@@ -25,7 +32,6 @@ void test_concat_uintv() {
 
     v3 = new_uintv(0);
     concat_uintv(v3, v1);
-
     assert(eql_uintv(v3, v1));
 
     free_uintv(v1);
@@ -36,15 +42,10 @@ void test_concat_uintv() {
 void test_copy_uintv() {
     struct uintv *v1, *v2;
 
-    v1 = new_uintv(2);
-    v2 = new_uintv(2);
-    v1->v[0] = 1;
-    v1->v[1] = 1;
-    v2->v[0] = 0;
-    v2->v[1] = 4;
+    v1 = new_uintv_and_fill(2, 1, 1);
+    v2 = new_uintv_and_fill(2, 0, 4);
 
     copy_uintv(v1, v2);
-
     assert(v1->v[0] == 0 && v1->v[1] == 4);
 
     free_uintv(v1);
@@ -54,15 +55,11 @@ void test_copy_uintv() {
 void test_eql_uintv() {
     struct uintv *v1, *v2, *v3, *v4, *v5;
 
-    v1 = new_uintv(2);
-    v2 = new_uintv(2);
+    v1 = new_uintv_and_fill(2, 1, 1);
+    v2 = new_uintv_and_fill(2, 0, 4);
     v3 = new_uintv(3);
     v4 = new_uintv(0);
     v5 = new_uintv(0);
-    v1->v[0] = 1;
-    v1->v[1] = 1;
-    v2->v[0] = 0;
-    v2->v[1] = 4;
 
     assert(!eql_uintv(v1, v2));
 
@@ -78,15 +75,6 @@ void test_eql_uintv() {
     free_uintv(v3);
     free_uintv(v4);
     free_uintv(v5);
-}
-
-void test_new_uintv_and_fill() {
-    struct uintv *v1;
-
-    v1 = new_uintv_and_fill(3, 2, 3, 4);
-    assert(v1->v[0] == 2 && v1->v[1] == 3 && v1->v[2] == 4);
-
-    free_uintv(v1);
 }
 
 void test_append_uintv() {
@@ -115,10 +103,10 @@ void test_clear_uintv() {
 int main()
 {
     test_new_uintv();
+    test_new_uintv_and_fill();
     test_concat_uintv();
     test_copy_uintv();
     test_eql_uintv();
-    test_new_uintv_and_fill();
     test_append_uintv();
     test_clear_uintv();
 

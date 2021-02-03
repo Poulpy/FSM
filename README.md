@@ -1,7 +1,9 @@
 # FSM
-Small implementation of Finite State Machines in C [WIP]
 
-How to compile part 2
+ Small implementation of Finite State Machines in C
+
+## Compile tests
+
 ```
-gcc transition.c transitionv.c uintv.c uintvv.c dfa.c test_dfa.c -O2 -g -W
+make tests
 ```
