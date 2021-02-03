@@ -1,11 +1,11 @@
 #ifndef DFA_H
 #define DFA_H
 
-#include<stdbool.h>
-#include<string.h>
-#include<stdlib.h>
-#include<stdio.h>
-#include<string.h>
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "uintv.h"
 #include "uintvv.h"

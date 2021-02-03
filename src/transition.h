@@ -1,8 +1,8 @@
 #ifndef TRANSITION_H
 #define TRANSITION_H
 
-#include<stdbool.h>
-#include<stdio.h>
+#include <stdbool.h>
+#include <stdio.h>
 
 // (Transition struct only for DFA)
 struct transition {

@@ -1,8 +1,8 @@
 #ifndef TRANSITIONV_H
 #define TRANSITIONV_H
 
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "transition.h"
 

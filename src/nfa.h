@@ -1,12 +1,12 @@
 #ifndef NFA_H
 #define NFA_H
 
-#include<stdbool.h>
+#include <stdbool.h>
+#include <stdio.h>
 
 #include "int_array.h"
 #include "uchar_array.h"
 #include "transition_array.h"
-#include<stdio.h>
 
 #define INITIAL_STATE 0
 
